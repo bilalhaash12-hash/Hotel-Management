@@ -1,0 +1,249 @@
+.container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  border-bottom: 1px solid black;
+  position: sticky;
+  top: 0;
+  background:rgba(255, 255, 255, 0.395);
+  color:black;
+  backdrop-filter: blur(3px);
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  font-family: 'Bebas Neue', sans-serif;
+  color: #0a3154;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 28px;
+  align-items: center;
+  color: #03052d;
+}
+.nav-links li {
+  text-align: center; 
+}
+.nav-links li a {
+  text-decoration: none;
+  font-family: 'Montserrat', sans-serif;
+  color: #03052d;
+  font-size: 16px;
+  transition: 0.3s;
+  position: relative;
+  display: flex;        
+  flex-direction: column;     
+  align-items: center;       
+  gap: 4px;                   
+}
+.nav-links li a i {
+  font-size: 18px;
+  
+}
+.nav-links li a:hover {
+  color: #03052d;
+   transform: translateY(-2px);
+}
+
+
+.overview {
+  padding: 60px 10%;
+  text-align: center;
+}
+
+.overview h1 {
+  font-size: 40px;
+  margin-bottom: 20px;
+  font-family: 'Bebas Neue', sans-serif;
+}
+
+.intro {
+  max-width: 700px;
+  margin: auto;
+  color: #555;
+  margin-bottom: 40px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+}
+
+.overview-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  padding: 20px;
+  background: #f5f5f5;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  background: #eaeaea;
+}
+
+.review-section {
+  text-align: center;
+  margin-top: 50px;
+}
+.review-section h2{
+  margin-bottom: 15px;
+}
+.slider {
+  width: 60%;
+  margin: auto;
+  background: whitesmoke;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.slide {
+  display: none;
+  padding: 20px;
+  text-align: center;
+  animation: fade 0.6s ease;
+}
+
+.slide.active {
+  display: block;
+}
+
+.slide p {
+  font-size: 18px;
+  color: black;
+}
+
+.slide h4 {
+  color: #020830;
+  text-decoration: underline;
+}
+
+@keyframes fade {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+.footer {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  margin-top: 50px;
+  color: #ddd;
+  padding: 70px 10% 20px;
+  font-family: 'Segoe UI', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer::before {
+  content: "";
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: rgba(231, 76, 60, 0.2);
+  filter: blur(120px);
+  top: -100px;
+  left: -100px;
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 60px;
+  position: relative;
+}
+
+
+.footer-col h3,
+.footer-col h2 {
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.footer-brand{
+  padding: 25px 20px;
+}
+
+.footer-brand h2 {
+  font-size: 26px;
+  color: #e74c3c;
+  text-align: center;
+}
+
+.footer-brand p {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #aaa;
+  text-align: center;
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-col ul li {
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #bbb;
+  transition: 0.3s;
+}
+
+
+.footer-col ul li:hover {
+  color: #fff;
+  transform: translateX(6px);
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 50px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 15px;
+  font-size: 13px;
+  color: #888;
+}
+
+.cont h2{
+  margin-top: 20px;
+  gap: 20px;
+  font-size: large;
+}
+
+.footer-coll {
+  display: flex;          
+  align-items: center;
+  gap: 20px;             
+}
+
+
+.footer-coll a {
+  display: inline-flex;   
+  align-items: center;
+  justify-content: center;
+  gap: 8px;              
+  padding: 12px 25px;
+  color: white;
+  border-radius: 30px;    
+  text-decoration: none;
+}
+
+.whatsapp {
+  background: #25D366;
+}
+
+.instagram {
+  background: #E1306C;
+}
+.footer-coll a:hover{
+   transform: translateY(-5px);
+}
