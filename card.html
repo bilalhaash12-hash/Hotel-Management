@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 <head>
@@ -262,4 +263,270 @@ displayRooms();
 </script>
 
 </body>
+=======
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  font-family: Arial;
+  background: #f3f4f6;
+  padding: 20px;
+}
+
+/* GRID CONTAINER */
+.container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* CARD */
+.card {
+  width: 100%;
+  border-radius: 20px;
+  background: #020833;
+  color: white;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+/* ADD CARD (+) */
+.add-card {
+  border-radius: 20px;
+  background: #020833;
+  color: white;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 60px;
+  cursor: pointer;
+  min-height: 250px;
+  transition: 0.3s;
+}
+
+.add-card:hover {
+  background: #0a0f4d;
+  transform: scale(1.03);
+}
+
+/* IMAGE */
+.images {
+  display: flex;
+  overflow-x: auto;
+}
+
+.images img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+/* BODY */
+.card-body {
+  padding: 15px;
+}
+
+/* BUTTON */
+.btn {
+  background: orange;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 6px;
+  margin-top: 5px;
+}
+
+/* FORM */
+.form-box {
+  display: none;
+  background: white;
+  color: black;
+  padding: 10px;
+}
+
+.form-box input,
+.form-box select,
+.form-box textarea {
+  width: 100%;
+  margin: 5px 0;
+  padding: 6px;
+}
+.back-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
+.back-btn {
+  background: #1a1f5a;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+   border-radius: 50px;
+}
+
+.back-btn:hover {
+  background: #0d133d;
+}
+</style>
+</head>
+
+<body>
+  <div class="back-container">
+  <button class="back-btn" onclick="goTopbar()">← Back</button>
+</div>
+
+
+<div class="container" id="container"></div>
+
+<script>
+let rooms = JSON.parse(localStorage.getItem("rooms")) || [];
+const container = document.getElementById("container");
+
+// LOAD
+function displayRooms() {
+  container.innerHTML = "";
+
+  // ✅ ADD CARD FIRST
+  container.innerHTML += `
+    <div class="add-card" onclick="addCard()">
+      +
+    </div>
+  `;
+
+  rooms.forEach((room, i) => {
+
+    let imagesHTML = room.images.map(img => `<img src="${img}">`).join("");
+
+    container.innerHTML += `
+      <div class="card">
+
+        <div class="images">${imagesHTML}</div>
+
+        <div class="card-body">
+          <h3>${room.type}</h3>
+          <p>₹${room.price}</p>
+          <p>${room.checkin} - ${room.checkout}</p>
+          <p>${room.features}</p>
+
+          <button class="btn" onclick="toggleForm(${i})">Edit</button>
+          <button class="btn" onclick="deleteCard(${i})">Delete</button>
+        </div>
+
+        <div class="form-box" id="form-${i}">
+          <select id="type-${i}">
+            <option>Deluxe</option>
+            <option>Suite</option>
+            <option>Standard</option>
+            <option>Family</option>
+          </select>
+
+          <input type="number" id="price-${i}" placeholder="Price">
+          
+          <input type="time" id="checkin-${i}">
+          <select id="checkinPeriod-${i}">
+            <option>AM</option>
+            <option>PM</option>
+          </select>
+
+          <input type="time" id="checkout-${i}">
+          <select id="checkoutPeriod-${i}">
+            <option>AM</option>
+            <option>PM</option>
+          </select>
+
+          <textarea id="features-${i}" placeholder="Features"></textarea>
+          <input type="file" id="images-${i}" multiple>
+
+          <button class="btn" onclick="updateCard(${i})">Update</button>
+        </div>
+
+      </div>
+    `;
+  });
+}
+
+// ADD
+function addCard() {
+  let newRoom = {
+    type: "New Room",
+    price: "",
+    checkin: "",
+    checkout: "",
+    features: "",
+    images: []
+  };
+
+  rooms.push(newRoom);
+  localStorage.setItem("rooms", JSON.stringify(rooms));
+  displayRooms();
+}
+
+// DELETE
+function deleteCard(i) {
+  rooms.splice(i, 1);
+  localStorage.setItem("rooms", JSON.stringify(rooms));
+  displayRooms();
+}
+
+// TOGGLE FORM
+function toggleForm(i) {
+  let form = document.getElementById("form-" + i);
+  form.style.display = (form.style.display === "block") ? "none" : "block";
+}
+
+// UPDATE
+function updateCard(i) {
+  let files = document.getElementById("images-" + i).files;
+
+  let checkin = document.getElementById("checkin-" + i).value;
+  let checkinPeriod = document.getElementById("checkinPeriod-" + i).value;
+
+  let checkout = document.getElementById("checkout-" + i).value;
+  let checkoutPeriod = document.getElementById("checkoutPeriod-" + i).value;
+
+  let readers = [];
+
+  for (let f = 0; f < files.length; f++) {
+    let reader = new FileReader();
+
+    readers.push(new Promise(resolve => {
+      reader.onload = () => resolve(reader.result);
+      reader.readAsDataURL(files[f]);
+    }));
+  }
+
+  Promise.all(readers).then(images => {
+
+    rooms[i].type = document.getElementById("type-" + i).value;
+    rooms[i].price = document.getElementById("price-" + i).value;
+    rooms[i].checkin = checkin + " " + checkinPeriod;
+    rooms[i].checkout = checkout + " " + checkoutPeriod;
+    rooms[i].features = document.getElementById("features-" + i).value;
+
+    if (images.length > 0) {
+      rooms[i].images = images;
+    }
+
+    localStorage.setItem("rooms", JSON.stringify(rooms));
+    displayRooms();
+  });
+}
+function goTopbar() {
+  window.location.href = "topbar.html";
+}
+
+// INIT
+displayRooms();
+</script>
+
+</body>
+>>>>>>> c07ab075c4850e4654b3ee61d6cc035421822c39
 </html>

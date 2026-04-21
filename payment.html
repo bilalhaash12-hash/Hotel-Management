@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -428,4 +429,436 @@
 </script>
 
 </body>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Owner Payment Dashboard</title>
+  <style>
+   body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background:  #f5f7fa;
+}
+
+.topbar {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  padding: 20px 20px;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  font-family: 'Montserrat', sans-serif;
+  position: relative;
+  z-index: 1000;
+}
+.left-info {
+  display: flex;
+  flex-direction: column;  
+  align-items: flex-start;
+  gap: 0;                  
+}
+.left-info a {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+  color: black;
+  text-decoration: none;
+  gap: 2px;
+  margin: 2px 0;
+}
+.logo {
+  margin: 0;              
+  padding: 0;
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 1.2;       
+}
+.left-info a:hover {
+  color: #1e90ff;
+}
+
+.center-info {
+  text-align: center;
+}
+
+#hotelName {
+  font-size: 30px;
+  font-weight: 700;
+  color: black;
+  text-decoration: ;
+  font-family: 'Pacifico', cursive;
+}
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  transition: 0.3s ease;
+}
+.user-info:hover {
+  transform: translateY(-3px);
+}
+#managerName {
+  font-weight: 600;
+  color: #6a0dad;
+  text-decoration: underline;
+}
+#greeting {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111;
+}
+
+.sidebar {
+  position: fixed;
+  top: 145px;
+  left: 0;
+  width: 250px;
+  height: calc(100vh - 163px); 
+  background: white;
+  color: black;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.collapsed {
+  width: 80px;
+}
+
+.menu {
+  list-style: none;
+  padding: 0px 4px;display: flex;
+  flex-direction: column;  
+  flex: 1;   
+  gap: 2px;
+}
+.menu-item {
+  padding: 15px 20px;
+  border-radius: 15px;
+  cursor: pointer;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+  white-space: nowrap;
+}
+.menu-item .icon {
+  width: 24px;                
+  text-align: center;         
+  font-size: 18px;
+  flex-shrink: 0;            
+}
+
+.menu-item .text {
+  flex: 1;                    
+  text-align: left;          
+}
+.menu-item a {
+   display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+  padding: 10px;
+}
+.menu-item:hover {
+  background: #020830;
+  color: white;
+}
+
+.menu-item.active {
+  background: #020830;
+  color: #ffffff;
+}
+
+
+.sidebar.collapsed .menu-item span,
+.sidebar.collapsed .logo {
+  display: none;
+}
+.main-content {
+  margin-left: 250px;
+  padding: 30px;
+  transition: margin-left 0.3s ease;
+}
+
+.sidebar.collapsed + .main-content {
+  margin-left: 80px;
+}
+.logout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.logout-btn{
+  background-color: #020830;
+  color: white;
+  border: none;
+  padding: 12px 95px;
+  border-radius: 10px;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: all 0.3s ease;
+}
+.logout-btn:hover {
+  background: #ff9800;
+  color: black;
+  transform: translateX(-5px);
+ }
+
+    .container{
+     margin-left: 250px;
+    padding: 30px;
+    transition: margin-left 0.3s ease;}
+
+    .container h1{
+      text-align:center;
+      margin-bottom:20px;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:15px;
+      margin-bottom:20px;
+      
+    }
+
+    .card{
+      background-color: #020830;
+      padding:15px;
+      border-radius:10px;
+      text-align:center;
+      color: white;
+    }
+
+    .card h2{
+      margin:5px 0;
+      color:#22c55e;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:10px;
+      overflow:hidden;
+      border-radius:10px;
+      background-color: #020830;
+      color: white;
+    }
+
+    th,td{
+      padding:12px;
+      text-align:left;
+      border-bottom:1px solid rgba(255,255,255,0.1);
+    }
+
+    th{
+      background:rgba(255,255,255,0.1);
+    }
+
+    tr:hover{
+      background:rgba(255,255,255,0.05);
+    }
+
+    .status{
+      padding:5px 10px;
+      border-radius:5px;
+      font-weight:bold;
+      display:inline-block;
+    }
+
+    .pending{
+      background:#f59e0b;
+      color:#000;
+    }
+
+    .cleared{
+      background:#22c55e;
+      color:#fff;
+    }
+
+    .paid{
+      background:#3b82f6;
+      color:#fff;
+    }
+
+    .btn{
+      padding:6px 10px;
+      border:none;
+      border-radius:5px;
+      cursor:pointer;
+      font-weight:bold;
+    }
+
+    .paybtn{
+      background:#3b82f6;
+      color:#fff;
+    }
+   
+
+    
+  </style>
+</head>
+<body>
+
+     <div class="topbar">
+    <div class="left-info">
+      <h2 class="logo">Hotel Admin</h2>
+      <a id="managerInfo" href="#">Manager:</a>
+      <a id="emailInfo" href="#">Email</a>
+      <a id="phoneInfo" href="#">Phone</a>
+      <a id="whatsappLink" href="#" target="_blank">WhatsApp</a>
+    </div>
+    <div class="center-info">
+      <span id="hotelName">Hotel Name</span>
+    </div>
+    <div class="user-info">
+      <span id="greeting">Hi 👋 User</span>
+      
+    </div>
+  </div>
+ 
+<div class="layout">
+<div class="sidebar">
+  <ul class="menu">
+  <li class="menu-item active">
+      <a href="topbar.html">
+      <span class="icon">🏠</span>
+      <span class="text">Dashboard</span>
+     </a>
+    </li>
+    <li class="menu-item">
+      <span class="icon">📅</span>
+      <span class="text">Bookings</span>
+    </li>
+  
+    <li class="menu-item">
+     <a href="card.html">
+    <span class="icon">🛏</span>
+    <span class="text">Rooms</span>
+    </a>
+   </li>
+
+    <li class="menu-item">
+      <span class="icon">👥</span>
+      <span class="text">Guests</span>
+    </li>
+    <li class="menu-item">
+        <a href="payment.html">
+      <span class="icon">💳</span>
+      <span class="text">Payments</span>
+      </a>
+    </li>
+    <li class="menu-item">
+      <span class="icon">⭐</span>
+      <span class="text">Reviews</span>
+    </li>
+    <li class="menu-item">
+      <span class="icon">⚙</span>
+      <span class="text">Settings</span>
+    </li>
+  </ul>
+<div class="logout">   
+   <button class="logout-btn" onclick="logout()">Logout</button>
+</div> 
+</div>
+
+  <div class="container">
+
+    <h1>Owner Payment Dashboard</h1>
+
+    <div class="stats">
+      <div class="card">
+        <p>Total Payments</p>
+        <h2 id="totalPayments">0</h2>
+      </div>
+      <div class="card">
+        <p>Cleared</p>
+        <h2 id="clearedPayments">0</h2>
+      </div>
+      <div class="card">
+        <p>Pending</p>
+        <h2 id="pendingPayments">0</h2>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Room</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="paymentTable"></tbody>
+    </table>
+  </div>
+
+<script>
+  let payments = JSON.parse(localStorage.getItem("payments")) || [
+    {name:"Bilal", room:"101", amount:2000, status:"Pending"},
+    {name:"Arjun", room:"102", amount:3000, status:"Pending"}
+  ];
+
+  function render(){
+    let table = document.getElementById("paymentTable");
+    table.innerHTML = "";
+
+    let total = payments.length;
+    let cleared = payments.filter(p=>p.status=="Cleared").length;
+    let pending = payments.filter(p=>p.status=="Pending").length;
+
+    document.getElementById("totalPayments").innerText = total;
+    document.getElementById("clearedPayments").innerText = cleared;
+    document.getElementById("pendingPayments").innerText = pending;
+
+    payments.forEach((p,i)=>{
+      table.innerHTML += `
+        <tr>
+          <td>${p.name}</td>
+          <td>${p.room}</td>
+          <td>₹${p.amount}</td>
+          <td><span class="status ${p.status.toLowerCase()}">${p.status}</span></td>
+          <td>
+            <button class="btn paybtn" onclick="markPaid(${i})">Paid</button>
+          </td>
+        </tr>
+      `;
+    });
+
+    localStorage.setItem("payments", JSON.stringify(payments));
+  }
+
+  function markPaid(i){
+    payments[i].status = "Paid";
+    render();
+  }
+
+  function logout(){
+    alert("Logged out!");
+    window.location.href = "login.html";
+  }
+
+  render();
+
+  
+
+</script>
+
+</body>
+>>>>>>> c07ab075c4850e4654b3ee61d6cc035421822c39
 </html>

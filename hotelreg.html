@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -170,4 +171,178 @@ document.getElementById("loginform").addEventListener("submit", function(e){
 </script>
 
 </body>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hotel Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #020833, #1a1f5a);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .form-box {
+      background: white;
+      padding: 30px 25px;
+      width: 340px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      text-align: center;
+      display: none;
+    }
+
+    .form-box.active {
+      display: block;
+    }
+
+    .form-box h2 {
+      margin-bottom: 20px;
+      color: #020833;
+    }
+
+    .form-box input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .form-box button {
+      width: 100%;
+      padding: 12px;
+      background: #020833;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+      font-weight: 600;
+    }
+
+    .form-box button:hover {
+      background: #ff9800;
+      color: black;
+    }
+
+    .error {
+      color: red;
+      font-size: 13px;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- LOGIN -->
+  <div class="form-box active" id="loginBox">
+    <form id="loginform">
+      <h2>HOTEL ADMIN</h2>
+
+      <input type="text" id="login-hotel" placeholder="Hotel Name" required>
+      <input type="email" id="login-email" placeholder="Email Address" required>
+      <input type="password" id="login-password" placeholder="Password" required>
+
+      <button type="submit">LOGIN</button>
+      <p>Don't have an account?
+        <a href="#" onclick="showform('registerBox')">REGISTER</a>
+      </p>
+    </form>
+  </div>
+
+  <!-- REGISTER -->
+  <div class="form-box" id="registerBox">
+    <form id="registerform">
+      <h2>HOTEL ADMIN</h2>
+
+      <input type="text" id="register-hotel" placeholder="Hotel Name" required>
+      <input type="text" id="manager" placeholder="Manager Name" required>
+      <input type="email" id="register-email" placeholder="Email Address" required>
+      <input type="text" id="phone" placeholder="Phone (10 digits only)" maxlength="10" required>
+      <input type="password" id="register-password" placeholder="Password" required>
+
+      <div id="error" class="error">Please enter a valid 10-digit phone number.</div>
+
+      <button type="submit">REGISTER</button>
+      <p>Already have an account?
+        <a href="#" onclick="showform('loginBox')">LOGIN</a>
+      </p>
+    </form>
+  </div>
+
+</div>
+
+<script>
+
+// 🔁 SWITCH FORMS
+function showform(id){
+  document.querySelectorAll(".form-box").forEach(box => {
+    box.classList.remove("active");
+  });
+  document.getElementById(id).classList.add("active");
+}
+
+// 📱 PHONE VALIDATION
+document.getElementById("phone").addEventListener("input", function () {
+  this.value = this.value.replace(/[^0-9]/g, "");
+});
+
+// 🟢 REGISTER
+document.getElementById("registerform").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const hotel = document.getElementById("register-hotel").value.trim();
+  const manager = document.getElementById("manager").value.trim();
+  const email = document.getElementById("register-email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const password = document.getElementById("register-password").value.trim();
+
+  if(phone.length !== 10){
+    document.getElementById("error").style.display = "block";
+    return;
+  }
+
+  const user = { hotel, manager, email, phone, password };
+  localStorage.setItem("user", JSON.stringify(user));
+
+  alert("Registered Successfully!");
+
+  window.location.href = "topbar.html";
+});
+
+// 🔵 LOGIN
+document.getElementById("loginform").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const email = document.getElementById("login-email").value.trim();
+  const password = document.getElementById("login-password").value.trim();
+
+  const savedUser = JSON.parse(localStorage.getItem("user"));
+
+  if(savedUser && email === savedUser.email && password === savedUser.password){
+    window.location.href = "topbar.html";
+  } else {
+    alert("❌ Wrong Email or Password");
+  }
+});
+
+</script>
+
+</body>
+>>>>>>> c07ab075c4850e4654b3ee61d6cc035421822c39
 </html>

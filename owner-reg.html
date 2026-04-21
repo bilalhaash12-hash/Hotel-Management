@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 <head>
@@ -139,3 +140,146 @@ document.getElementById("registerForm").addEventListener("submit", function(e) {
 </script>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+ body {
+  margin: 0;
+  height: 100vh;
+  padding: 15px;
+  display: flex;
+  justify-content: center;  
+  align-items: center;      
+  background: linear-gradient(135deg, #1a1f5a, #020833);
+  font-family: 'Poppins', sans-serif;
+}
+
+#registerForm {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+#registerForm h2{
+  text-align: center;
+}
+
+#registerForm input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+#registerForm input:focus {
+  border-color: #1a1f5a;
+  outline: none;
+}
+#registerForm input:hover{
+  transform: translateY(-5px);
+}
+.btn-primary {
+  padding: 10px;
+  background: #1a1f5a;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-primary:hover {
+  background: #020833;
+  transform: translateY(-5px);
+}
+
+.full-width {
+  width: 100%;
+}
+
+#registerForm p {
+  font-size: 14px;
+  text-align: center;
+}
+
+#registerForm a {
+  color: #1a1f5a;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+</style>
+</head>
+<body>
+<form id="registerForm">
+  <h2>HOTEL REGISTER</h2>
+   <input type="hotel" id="hotel" placeholder="Hotel" required>
+  <input type="Manager" id="manager" placeholder="Manager" required>
+  <input type="email" id="email" placeholder="Email" required>
+   <input type="phone" id="phone" placeholder="Phone" required>
+  <input type="password" id="password" placeholder="Password" required>
+  <input type="password" id="confirmPassword" placeholder="ConfirmPassword" required>
+  <button type="submit" class="btn-primary full-width">Register Hotel</button>
+  <p>Already have an account?<a href="owner-login.html">Login here</a></p>
+</form>
+<script>
+const form = document.getElementById("registerForm");
+
+form.addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+
+  if (password !== confirmPassword) {
+    alert("❌ Passwords do not match");
+    return;
+  }
+
+document.getElementById("registerForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const booking = {
+    id: Date.now(),
+    manager: document.getElementById("manager").value,
+    hotel: document.getElementById("hotel").value,
+    email: document.getElementById("email").value,
+    phone: document.getElementById("phone").value,
+    status: "Pending"
+  };
+
+  let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+   hotels.push(hotelData);
+  localStorage.setItem("hotels", JSON.stringify(hotels));
+
+  alert("Hotel registration sent for approval!");
+  this.reset();
+});
+
+
+  // Save user
+  localStorage.setItem("userEmail", email);
+  localStorage.setItem("userPassword", password);
+
+  // Mark logged in
+  localStorage.setItem("isLoggedIn", "true");
+
+  alert("✅ Registered Successfully!");
+
+  // Go to dashboard
+  window.location.href = "adminpage.html";
+});
+</script>
+</body>
+</html>
+>>>>>>> c07ab075c4850e4654b3ee61d6cc035421822c39
