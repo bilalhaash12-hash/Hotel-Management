@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Premium Stay - Hotel Booking</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="container">
+    <div class="logo">Premium Stay</div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html" class="login-btn"><i class="fas fa-home"></i>Home</a></li>
+        <li><a href="feature.html"class="login-btn"><i class="fas fa-star"></i>Featuer</a></li>
+        <li><a href="overview.html"class="login-btn"><i class="fas fa-eye"></i>Overview</a></li>
+        <li><a href="contact.html" class="login-btn"><i class="fas fa-phone"></i>Contact</a></li>
+        <button class="login-btn" onclick="window.location.href='choice.html'">LOGIN</button>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-overlay">
+      <div class="hero-content">
+        <h1>Find Your Perfect Stay</h1>
+        <p>Book hotels, rooms and vacation stays with comfort and ease.Experience luxury stays, exclusive deals, and hassle-free reservations—all in one place.</p>
+ 
+        <div class="search-box">
+          <input type="text" placeholder="Location" />
+          <input type="date" />
+          <input type="date" />
+          <select>
+            <option>Guests</option>
+            <option>1 Guest</option>
+            <option>2 Guests</option>
+            <option>3 Guests</option>
+            <option>4 Guests</option>
+          </select>
+          <button>Search</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="featured-hotels">
+  <h2>Featured Hotels</h2>
+
+  <div class="hotel-container">
+
+    <!-- CARD 1 -->
+    <div class="hotel-card">
+      <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa">
+      <div class="hotel-info">
+        <h3>Ocean Breeze Resort</h3>
+        <p>Kozhikode, Kerala</p>
+        <p class="price">₹3200 / night</p>
+        <p class="rating">⭐ 4.7</p>
+        <button onclick="openModal(this)">View Details</button>
+      </div>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="hotel-card">
+      <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800">
+      <div class="hotel-info">
+        <h3>Green Hill Stay</h3>
+        <p>Wayanad, Kerala</p>
+        <p class="price">₹1800 / night</p>
+        <p class="rating">⭐ 4.2</p>
+        <button onclick="openModal(this)">View Details</button>
+      </div>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="hotel-card">
+      <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1200">
+      <div class="hotel-info">
+        <h3>Royal Taj</h3>
+        <p>Kannur, Kerala</p>
+        <p class="price">₹3000 / night</p>
+        <p class="rating">⭐ 4.9</p>
+        <button onclick="openModal(this)">View Details</button>
+      </div>
+    </div>
+
+    <!-- CARD 4 -->
+    <div class="hotel-card">
+      <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945">
+      <div class="hotel-info">
+        <h3>Royal Palace</h3>
+        <p>Kollam, Kerala</p>
+        <p class="price">₹4000 / night</p>
+        <p class="rating">⭐ 4.9</p>
+        <button onclick="openModal(this)">View Details</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div id="modal" class="modal">
+  <div class="modal-content">
+
+    <span class="close" onclick="closeModal()">&times;</span>
+
+    <!-- ✅ THIS is where your lines go -->
+    <img id="modal-img">
+    <h2 id="modal-title"></h2>
+    <p id="modal-location"></p>
+    <p id="modal-rating"></p>
+    <p id="modal-price"></p>
+
+    <div class="booking-form">
+      <input type="text" placeholder="Your Name" id="name">
+      <input type="number" placeholder="Guests" id="guests">
+      <input type="date" id="date">
+
+      <select id="time">
+        <option>AM</option>
+        <option>PM</option>
+      </select>
+
+      <input type="number" placeholder="Adults" id="adults">
+
+      <button class="book-btn" onclick="bookNow()">Book Now</button>
+    </div>
+
+  </div>
+</div>
+
+  <section>
+<div class="review-section">
+  <h2>Customer Reviews</h2>
+  <div class="slider">
+    <div class="slide active">
+  <p>"Amazing stay! The rooms were clean, staff was very polite, and the food quality was excellent. Highly recommended."</p>
+  <h4>- Rahul Sharma</h4>
+</div>
+
+<div class="slide">
+  <p>"Loved the ambience and peaceful environment. Perfect place for a weekend getaway. Service was quick and professional."</p>
+  <h4>- Priya Verma</h4>
+</div>
+
+<div class="slide">
+  <p>"The food was delicious, especially the breakfast buffet. Rooms were spacious and well maintained."</p>
+  <h4>- Amit Patel</h4>
+</div>
+
+<div class="slide">
+  <p>"Great location and beautiful interior design. The vibe of the hotel is very relaxing and premium."</p>
+  <h4>- Sneha Kapoor</h4>
+</div>
+
+<div class="slide">
+  <p>"Staff was very helpful and responsive. Facilities like WiFi, parking, and room service were top-notch."</p>
+  <h4>- Arjun Mehta</h4>
+</div>
+
+<div class="slide">
+  <p>"Clean rooms, good hygiene, and excellent hospitality. Would definitely visit again."</p>
+  <h4>- Neha Gupta</h4>
+</div>
+
+<div class="slide">
+  <p>"The ambience was classy and calm. Perfect for family stays and business trips."</p>
+  <h4>- Vikram Singh</h4>
+</div>
+
+<div class="slide">
+  <p>"Loved the vibe! Music, lighting, and decor made it feel like a luxury experience."</p>
+  <h4>- Ananya Das</h4>
+</div>
+
+<div class="slide">
+  <p>"Room service was fast and food tasted amazing. One of the best hotel experiences I've had."</p>
+  <h4>- Karan Joshi</h4>
+</div>
+
+<div class="slide">
+  <p>"Facilities were well maintained. Gym, parking, and reception service were all very good."</p>
+  <h4>- Riya Nair</h4>
+</div>
+    <div class="slide">
+      <p>"Excellent hotel with great service!"</p>
+      <h4>- Rahul Sharma</h4>
+    </div>
+    <div class="slide">
+      <p>"Very clean rooms and friendly staff."</p>
+      <h4>- Priya Verma</h4>
+    </div>
+    <div class="slide">
+      <p>"Had a wonderful stay experience."</p>
+      <h4>- John Doe</h4>
+    </div>
+     <div class="slider">
+      <p>"Excellent hotel with great service!"</p>
+      <h4>- Rahul Sharma</h4>
+    </div>
+    <div class="slide">
+      <p>"Very clean rooms and friendly staff."</p>
+      <h4>- Priya Verma</h4>
+    </div>
+    <div class="slide">
+      <p>"Had a wonderful stay experience."</p>
+      <h4>- John Doe</h4>
+    </div>
+  </div>
+</div>
+</section>
+
+  <section class="why-us">
+    <h2>Why Choose Us</h2>
+    <div class="why-container">
+      <div class="why-card">
+        <h3>Easy Booking</h3>
+        <p>Quick and simple hotel booking process.</p>
+      </div>
+      <div class="why-card">
+        <h3>Best Price</h3>
+        <p>Affordable rooms with premium comfort.</p>
+      </div>
+      <div class="why-card">
+        <h3>Safe Stay</h3>
+        <p>Verified hotels and secure booking system.</p>
+      </div>
+      <div class="why-card">
+        <h3>24/7 Support</h3>
+        <p>We’re always here to help you anytime.</p>
+      </div>
+    </div>
+  </section>
+
+<footer class="footer">
+    <div class="footer-brand">
+      <h2>PREMIUM STAY</h2>
+      <p>
+       <p>
+  Smart hotel booking & management platform designed to simplify reservations,
+  streamline operations, and enhance overall guest experience. Our system offers
+  real-time room availability, secure online payments, and intelligent booking
+  management to ensure smooth and hassle-free service. With advanced tools like
+  AI-based room suggestions, dynamic pricing, and automated check-in, we help
+  hotels optimize efficiency and maximize revenue. Guests enjoy personalized
+  experiences, instant booking confirmations, and seamless communication, while
+  administrators benefit from powerful dashboards, analytics, and complete
+  multi-property control — all in one smart, user-friendly platform.
+</p>
+      </p>
+    </div>
+<div class="footer-container">
+  
+    <div class="footer-col">
+      <h3>Smart Tools</h3>
+      <ul>
+        <li>✔ AI Room Suggestions</li>
+        <li>✔ Smart Pricing Engine</li>
+        <li>✔ Automated Check-in</li>
+        <li>✔ Booking Analytics</li>
+        <li>✔ Demand Forecasting</li>
+        <li>✔ Dynamic Discounts</li>
+        <li>✔ Occupancy Tracking</li>
+        <li>✔ Revenue Optimization</li>
+      </ul>
+    </div>
+
+   
+    <div class="footer-col">
+      <h3>Core Features</h3>
+      <ul>
+        <li>✔ Live Availability</li>
+        <li>✔ Secure Payments</li>
+        <li>✔ Live Room Availability</li>
+        <li>✔ Multi-Property Management</li>
+        <li>✔ Secure Online Payments</li>
+        <li>✔ Staff Dashboard</li>
+        <li>✔ Booking History</li>
+        <li>✔ Real-Time Updates</li>
+        <li>✔ Role-Based Access</li>
+        <li>✔ Multi-Language Support</li>
+      </ul>
+    </div>
+
+   <div class="footer-col">
+      <h3>Guest Services</h3>
+      <ul>
+        <li>✔ 24/7 Customer Support</li>
+        <li>✔ Easy Cancellation</li>
+        <li>✔ Instant Booking Confirmation</li>
+        <li>✔ Personalized Stay Experience</li>
+        <li>✔ Room Upgrade Options</li>
+        <li>✔ Special Requests Handling</li>
+        <li>✔ Loyalty Rewards</li>
+        <li>✔ Feedback & Reviews</li>
+     </ul>
+   </div>
+    
+    <div class="footer-col">
+      <h3>Connect</h3>
+      <ul>
+        <li>📍 Locations</li>
+        <li>📞 Support</li>
+        <li>📧 Email Us</li>
+        <li>💬 Live Chat</li>
+      </ul>
+    </div>
+
+     <div class="cont">
+        <h2>Social links</h2>
+    <div class="footer-coll">
+    <a href="https://wa.me/919876543210" target="_blank" class="whatsapp">Whatspp
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+    <a href="https://instagram.com/yourusername" target="_blank" class="instagram">Instagram
+        <i class="fa-brands fa-instagram"></i>
+    </a>
+  </div></div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 PREMIUM STAY | Designed for smarter hospitality</p>
+  </div>
+</footer>
+<script>
+let index = 0;
+const slides = document.querySelectorAll(".slide");
+
+function showSlide(i) {
+  slides.forEach(slide => slide.classList.remove("active"));
+  slides[i].classList.add("active");
+}
+
+function autoSlide() {
+  index = (index + 1) % slides.length;
+  showSlide(index);
+}
+
+setInterval(autoSlide, 3000);
+
+function openModal(btn) {
+  const card = btn.closest(".hotel-card");
+
+  const img = card.querySelector("img").src;
+  const title = card.querySelector("h3").innerText;
+  const location = card.querySelector("p:nth-child(2)").innerText;
+  const price = card.querySelector(".price").innerText;
+  const rating = card.querySelector(".rating").innerText;
+
+  // Set modal data
+  document.getElementById("modal-img").src = img;
+  document.getElementById("modal-title").innerText = title;
+  document.getElementById("modal-location").innerText = location;
+  document.getElementById("modal-price").innerText = price;
+  document.getElementById("modal-rating").innerText = rating;
+
+  document.getElementById("modal").style.display = "flex";
+}
+
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
+}
+
+function bookNow() {
+  let name = document.getElementById("name").value;
+  let guests = document.getElementById("guests").value;
+  let date = document.getElementById("date").value;
+  let time = document.getElementById("time").value;
+  let adults = document.getElementById("adults").value;
+
+  if (!name || !guests || !date || !adults) {
+    alert("Please fill all fields!");
+    return;
+  }
+
+  alert(
+    `Booking Confirmed!\nName: ${name}\nGuests: ${guests}\nDate: ${date}\nTime: ${time}\nAdults: ${adults}`
+  );
+
+  closeModal();
+}
+function goToChoice() {
+  window.location.href = "choice.html";
+}
+</script>
+</body>
+</html>  
