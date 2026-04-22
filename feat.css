@@ -1,4 +1,18 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial;
+}
 
+body {
+  background: #f4f6f9;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
 .container{
   display: flex;
   justify-content: space-between;
@@ -121,7 +135,7 @@
 
 .footer-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1fr;
   gap: 60px;
   position: relative;
 }
@@ -210,4 +224,121 @@
 }
 .footer-coll a:hover{
    transform: translateY(-5px);
+}
+/* ===== GLOBAL RESPONSIVE FIX ===== */
+
+/* Make everything flexible */
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* NAVBAR */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 10px;
+    padding: 0;
+  }
+}
+/* ===== GLOBAL ===== */
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ===== NAVBAR ===== */
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+}
+
+/* ===== TABLET VIEW ===== */
+@media (max-width: 1024px) {
+  .features-box {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+}
+
+/* ===== MOBILE VIEW ===== */
+@media (max-width: 600px) {
+
+  /* Navbar */
+  .nav-links {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* Sections */
+  .overview {
+    padding: 30px 5%;
+  }
+
+  .intro {
+    font-size: 16px;
+  }
+
+  /* Features */
+  .features-box {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+
+  /* Footer */
+  .footer-container {
+    grid-template-columns: 1fr; /* FIXED (not flex) */
+    text-align: center;
+  }
+
+  .footer-col ul li {
+    transform: none;
+  }
+
+  /* Buttons / Links */
+  .footer-coll {
+    flex-direction: column;
+  }
+}
+
+/* ===== EXTRA SMALL DEVICES ===== */
+@media (max-width: 400px) {
+  .logo {
+    font-size: 22px;
+  }
+
+  .overview h1 {
+    font-size: 28px;
+  }
+
+  .feature-item h3 {
+    font-size: 18px;
+  }
 }

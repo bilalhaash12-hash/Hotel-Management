@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -275,7 +274,68 @@
       background:#3b82f6;
       color:#fff;
     }
-   
+   /* 📱 MOBILE + TABLET FIX */
+@media (max-width: 768px) {
+
+  /* Topbar adjust */
+  .topbar {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .left-info,
+  .user-info {
+    align-items: center;
+  }
+
+  #hotelName {
+    font-size: 22px;
+  }
+
+  /* Sidebar → Top menu (instead of left) */
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .menu {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+  }
+
+  .menu-item {
+    flex-direction: column;
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .logout {
+    display: none;
+  }
+
+  /* Main container full width */
+  .container {
+    margin-left: 0;
+    padding: 15px;
+  }
+
+  /* Cards full width */
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  /* Table scroll */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
 
     
   </style>
@@ -321,8 +381,10 @@
    </li>
 
     <li class="menu-item">
+      <a href="guest.html">
       <span class="icon">👥</span>
       <span class="text">Guests</span>
+      </a>
     </li>
     <li class="menu-item">
         <a href="payment.html">
@@ -417,15 +479,58 @@
     render();
   }
 
-  function logout(){
-    alert("Logged out!");
-    window.location.href = "login.html";
+  render();
+document.addEventListener("DOMContentLoaded", function () {
+  const data = JSON.parse(localStorage.getItem("user"));
+
+  // ✅ Get current page name
+  const currentPage = window.location.pathname.split("/").pop();
+
+  // ❌ Redirect ONLY if not logged in AND not on allowed pages
+  const publicPages = ["hotelreg.html"]; // pages allowed without login
+
+  if (!data && !publicPages.includes(currentPage)) {
+    window.location.href = "hotelreg.html";
+    return;
   }
 
-  render();
+  // ✅ If elements exist, then update (prevents errors)
+  if (data) {
+    if (document.getElementById("hotelName")) {
+      document.getElementById("hotelName").textContent = data.hotel || "Hotel";
+    }
 
-  
+    if (document.getElementById("managerInfo")) {
+      document.getElementById("managerInfo").textContent = `Manager: ${data.manager}`;
+    }
 
+    if (document.getElementById("emailInfo")) {
+      document.getElementById("emailInfo").textContent = `Email: ${data.email}`;
+    }
+
+    if (document.getElementById("phoneInfo")) {
+      document.getElementById("phoneInfo").textContent = `Phone: ${data.phone}`;
+    }
+
+    if (document.getElementById("greeting")) {
+      document.getElementById("greeting").textContent = `Hi 👋 ${data.manager}`;
+    }
+
+    if (data.phone && document.getElementById("whatsappLink")) {
+      document.getElementById("whatsappLink").href = `https://wa.me/91${data.phone}`;
+    }
+  }
+});
+document.querySelectorAll(".menu-item a").forEach(link => {
+  if (link.href.includes(window.location.pathname.split("/").pop())) {
+    link.parentElement.classList.add("active");
+  }
+});
+
+// LOGOUT
+function logout() {
+  localStorage.removeItem("user");
+  window.location.href = "hotelreg.html";
+}
 </script>
-
 </body>

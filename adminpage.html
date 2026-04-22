@@ -1,419 +1,454 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Bebas+Neue&display=swap" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Panel</title>
 
 <style>
 body {
   margin: 0;
-  font-family: 'Poppins', sans-serif;
+  font-family: Arial;
   background: #f4f6f9;
 }
-.container{
+
+/* HEADER */
+.container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 25px 30px;
-  border-bottom: 1px solid black;
-  position: sticky;
-  top: 0;
-  background:rgba(255, 255, 255, 0.395);
-  color:black;
-  backdrop-filter: blur(3px);
+  padding: 15px;
+  background: white;
+  border-bottom: 1px solid #ccc;
 }
 
 .logo {
-  font-size: 28px;
+  font-size: 22px;
   font-weight: bold;
   font-family: 'Bebas Neue', sans-serif;
-  color: #0a3154;
 }
-.logout-btn {
-  background: rgb(7, 3, 81);
-  color: white;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 6px;
+
+.menu-btn {
+  font-size: 20px;
   cursor: pointer;
-  transition: 0.3s;
+  display: none;
 }
 
-.logout-btn:hover {
-  background: rgb(3, 1, 20);
-  transform: translateY(-5px);
+.logout-btn {
+  background: #020833;
+  color: white;
+  padding: 8px 12px;
+  border: none;
 }
 
+/* LAYOUT */
 .admin-container {
   display: flex;
 }
 
-/* Sidebar */
+/* SIDEBAR */
 .sidebar {
   width: 220px;
-  height: 100vh;
-  background:white;
-  color: black;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  border-right: 1px solid black;
-}
-
-.sidebar h2 {
-  margin-bottom: 10px;
-  color: black;
-  text-align: center;
+  background: #020833;
+  color: white;
+  min-height: 100vh;
+  padding: 10px;
 }
 
 .menu {
-  padding: 15px 20px;
-  background-color: #020833;
-  color: white;
-  border-radius: 15px;
+  padding: 12px;
+  margin: 5px 0;
   cursor: pointer;
-  transition: 0.3s;
-  text-align: center;
-
+  background: #020833;
 }
 
-.menu:hover {
-  background-color: #020833;
-  color:white;
-  transform: translateX(5px);
-}
-
+.menu:hover,
 .menu.active {
   background: #333;
-  color: white;
 }
 
+/* CONTENT */
 .content {
   flex: 1;
   padding: 20px;
 }
-.content h2{
-  text-align: center;
-  font-family: 'Bebas Neue', sans-serif;
+h2{
+    text-align: center;
+     font-family: 'Bebas Neue', sans-serif;
 }
-
 .section {
   display: none;
 }
-.section h2{
-  text-align: center;
-  font-family: 'Bebas Neue', sans-serif;
-   border-bottom: 1px solid black;
-}
-
 .section.active {
   display: block;
 }
 
-/* Cards */
+/* CARDS */
 .cards {
- display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 15px;
 }
 .card {
-  background: rgb(3, 5, 69);
-  padding: 20px;
+  background: #020833;
   color: white;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  transition: 0.3s;
-}
-.card p{
-  text-align: center;
-}
-.card:hover{
-  transform: translateY(-5px);
-}
-h3{
+  padding: 20px;
   text-align: center;
 }
 
+/* TABLE */
+.table-scroll {
+  overflow-x: auto;
+}
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
-  background: white;
+  margin-top: 15px;
+  min-width: 500px;
 }
-
+th, td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
 th {
-  padding: 10px;
-  border-bottom: 1px solid black;
-  text-align: center;
-  border:1px solid rgb(58, 51, 51);
-  background-color: #020833;
+  background: #020833;
   color: white;
 }
-td {
-  padding: 10px;
-  border-bottom: 1px solid black;
-  text-align: center;
-  border:1px solid rgb(58, 51, 51);
-}
 
-.add-btn {
-  background: red;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 5px;
-  cursor: pointer;
-}
+/* MOBILE */
+@media(max-width:768px){
 
-/* Mobile */
-@media(max-width: 768px){
-  .sidebar {
-    width: 150px;
+  .menu-btn {
+    display: block;
   }
+
+  .sidebar {
+    position: fixed;
+    left: -220px;
+    top: 0;
+    height: 100%;
+    transition: 0.3s;
+    z-index: 1000;
+  }
+
+  .sidebar.active {
+    left: 0;
+  }
+
+  .admin-container {
+    flex-direction: column;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
 }
 </style>
 </head>
 
 <body>
+
 <header class="container">
-    <div class="logo">Premium Stay</div>
-     <button class="logout-btn" onclick="logout()">LOGOUT</button>
+  <span class="menu-btn" onclick="toggleMenu()">☰</span>
+  <div class="logo">PREMIUM STAY</div>
+  <button class="logout-btn" onclick="logout()">Logout</button>
 </header>
 
 <div class="admin-container">
-  <div class="sidebar">
-    
-    <div class="menu active" onclick="showSection('dashboard', this)">DASHBOARD</div>
-    <div class="menu" onclick="showSection('bookings', this)">BOOKINGS</div>
-    <div class="menu" onclick="showSection('enquiries', this)">ENQUIRIES</div>
-    <div class="menu" onclick="showSection('hotels', this)">HOTELS</div>
-    <div class="menu" onclick="showSection('users', this)">USERS REVIEW</div>
 
+<div class="sidebar" id="sidebar">
+  <div class="menu active" onclick="showSection('dashboard', this)">DASHBOARD</div>
+  <div class="menu" onclick="showSection('hotels', this)">HOTELS</div>
+  <div class="menu" onclick="showSection('enquiries', this)">ENQUIRIES</div>
+  <div class="menu" onclick="showSection('reviews', this)">REVIEWS</div>
+  <div class="menu" onclick="showSection('maintenance', this)">MAINTENANCE</div>
+  <div class="menu" onclick="showSection('hotelRequests', this)">HOTEL REQUESTS</div>
+</div>
+
+<div class="content">
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="section active">
+     <h2>DASHBOARD</h2>
+<div class="cards">
+  <div class="card">
+    <h3 id="totalBookings">0</h3>
+    <p>Bookings</p>
   </div>
+  <div class="card">
+    <h3 id="totalRevenue">₹0</h3>
+    <p>Revenue</p>
+  </div>
+</div>
 
-  <div class="content">
-    <section id="dashboard" class="section active">
-      <h2>Dashboard</h2>
-
-      <div class="cards">
-
-        <div class="card">
-          <h3 id="totalBookings">0</h3>
-          <p>Total Bookings</p>
-        </div>
-
-        <div class="card">
-          <h3 id="totalRevenue">₹0</h3>
-          <p>Total Revenue</p>
-        </div>
-      
-
-       <div class="card">
-          <h3 id="Reviews"></h3>
-          <p>Custemer Review</p>
-        </div>
-
-       <div class="card">
-          <h3 id="Hotel List">0</h3>
-          <p>Total Hotels</p>
-        </div>
-
-      </div>
-
-      <h3>BOOKINGS</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Hotel</th>
-            <th>Date</th>
-            <th>Price</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="bookingList"></tbody>
-      </table>
-    </section>
-
-    <!-- Users -->
-    <section id="users" class="section">
-      <h2>User REview</h2>
-    </section>
-
-    <!-- Bookings -->
-    <section id="bookings" class="section">
-      <h2>Bookings</h2>
-      <table>
-      <tr>
-        <th>Hotel Name</th><th>Booking Id</th><th>Guest</th><th>Date</th><th>Price</th><th>Room Type</th><th>Action</th>
-      </tr>
-      <tr>
-        <td>Taj</td><td>ID A#ES23</td><td>15</td><td>June 25</td><td>₹20,000</td><td>Deluxe</td><td>Approve/Cancel</td>
-      </tr>
-      <tr>
-        <td>Palace</td><td>ID A#ES35</td><td>18</td><td>june 28</td><td>₹24,000</td><td>suite</td><td>Approve/Cancel</td>
-      </tr>
-      </table>
-      <p>All booking records shown here.</p>
-    </section>
-
-    <!-- Enquiries -->
-    <section id="enquiries" class="section">
-      <h2>Enquiries</h2>
-      <p>User messages will appear here.</p>
-    </section>
-
-    <!-- Hotels -->
-    <section id="hotels" class="section">
-      <h2>Hotels</h2>
-      <table border="1">
-  <thead>
-    <tr>
-      <th>Hotel Nmae</th>
-      <th>Manager</th>
-      <th>Email</th>
-       <th>Phone</th>
-      <th>Status</th>
-      <th>Action</th>
-    </tr>
-    <tr>
-        <td>Taj</td><td>ABBU</td><td>Abbu@1gmail.com</td><td>8765825231</td><td>Active</td><td>Approve/Cancel</td>
-      </tr>
-      <tr>
-        <td>Palace</td><td>SIRAJ</td><td>Sirajali@gmail.com</td><td>8765825231</td><td>Active</td><td>Approve/Cancel</td>
-      </tr>
-  </thead>
-  <tbody id="bookingList"></tbody>
+<div class="table-scroll">
+     <h2>BOOKINGS</h2>
+<table>
+<tr><th>Name</th><th>Hotel</th><th>Date</th><th>Count</th><th>Price</th><th>Action</th></tr>
+<tbody id="bookingList"></tbody>
 </table>
-<tfoot>
-  <tr>
-    <td colspan="5"></td>
-    <td style="text-align: right;">
-      <button class="add-btn">Add Hotel</button>
-    </td>
-  </tr>
-</tfoot>
-    </section>
+</div>
+</section>
 
-  </div>
+<!-- HOTELS -->
+<section id="hotels" class="section">
+     <h2>HOTEL DETAILS</h2>
+<div class="table-scroll">
+<table>
+<tr><th>Hotel</th><th>Manager</th><th>Email</th><th>Phone</th><th>Status</th></tr>
+<tbody id="hotelList"></tbody>
+</table>
+</div>
+</section>
+
+<!-- ENQUIRIES -->
+<section id="enquiries" class="section">
+     <h2>ENQUIRIES</h2>
+<div class="table-scroll">
+<table>
+<tr><th>Name</th><th>Message</th><th>Action</th></tr>
+<tbody id="enquiryList"></tbody>
+</table>
+</div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews" class="section">
+     <h2>USER RIVIES</h2>
+<div class="table-scroll">
+<table>
+<tr><th>User</th><th>Review</th><th>Rating</th></tr>
+<tbody id="reviewList"></tbody>
+</table>
+</div>
+</section>
+
+<!-- MAINTENANCE -->
+<section id="maintenance" class="section">
+    <h2>MAINTENANCE</h2>
+<div class="table-scroll">
+<table>
+<tr><th>Hotel</th><th>Issue</th><th>Status</th><th>Action</th></tr>
+<tbody id="maintenanceList"></tbody>
+</table>
+</div>
+</section>
+
+<section id="hotelRequests" class="section">
+    <h2>HOTEL REQUESTS</h2>
+<div class="table-scroll">
+<table>
+<tr>
+  <th>Hotel</th>
+  <th>Manager</th>
+  <th>Email</th>
+  <th>Phone</th>
+  <th>Status</th>
+  <th>Action</th>
+</tr>
+<tbody id="hotelRequestList"></tbody>
+</table>
+</div>
+</section>
+
+</div>
 </div>
 
 <script>
 
-// 🔐 Check login
-if(localStorage.getItem("isLoggedIn") !== "true"){
-  window.location.href = "adminpage.html";
+// SIDEBAR TOGGLE
+function toggleMenu(){
+  document.getElementById("sidebar").classList.toggle("active");
 }
 
-// 📦 Demo data
-if(!localStorage.getItem("bookings")){
-  const demo = [
-    {name:"Ali", hotel:"Sea View", price:2000},
-    {name:"Rahul", hotel:"Grand Hotel", price:3500}
-  ];
-  localStorage.setItem("bookings", JSON.stringify(demo));
+// SWITCH SECTION
+function showSection(id, el){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+
+  document.querySelectorAll(".menu").forEach(m=>m.classList.remove("active"));
+  el.classList.add("active");
+
+  document.getElementById("sidebar").classList.remove("active");
 }
 
-let bookings = JSON.parse(localStorage.getItem("bookings"));
-const table = document.getElementById("bookingList");
+// BOOKINGS
+let bookings = JSON.parse(localStorage.getItem("bookings")) || [
+  {name:"Ali", hotel:"Sea View", date:jan23 ,count:2 , price:2000},
+  {name:"Rahul", hotel:"Grand", date:jan14 ,count:3 , price:3500}
+];
 
-let totalRevenue = 0;
-
-// 📊 Load bookings
 function loadBookings(){
-  table.innerHTML = "bookings";
-  totalRevenue = 0;
+  let table = document.getElementById("bookingList");
+  table.innerHTML="";
+  let total=0;
 
-  bookings.forEach((b, index) => {
-    totalRevenue += b.price;
-
-    table.innerHTML += `
+  bookings.forEach((b,i)=>{
+    total+=b.price;
+    table.innerHTML+=`
       <tr>
         <td>${b.name}</td>
         <td>${b.hotel}</td>
+        <td>${b.date}</td>
+        <td>${b.count}</td>
         <td>₹${b.price}</td>
-        <td><button class="delete" onclick="deleteBooking(${index})">Delete</button></td>
-      </tr>
-    `;
+        <td><button onclick="deleteBooking(${i})">Delete</button></td>
+      </tr>`;
   });
 
-  document.getElementById("totalBookings").innerText = bookings.length;
-  document.getElementById("totalRevenue").innerText = "₹" + totalRevenue;
+  document.getElementById("totalBookings").innerText=bookings.length;
+  document.getElementById("totalRevenue").innerText="₹"+total;
 }
-
-loadBookings();
-
-// ❌ Delete booking
-function deleteBooking(index){
-  bookings.splice(index,1);
-  localStorage.setItem("bookings", JSON.stringify(bookings));
+function deleteBooking(i){
+  bookings.splice(i,1);
+  localStorage.setItem("bookings",JSON.stringify(bookings));
   loadBookings();
 }
 
-function loadHotels() {
-  const hotels = JSON.parse(localStorage.getItem("hotels")) || [];
-  const table = document.querySelector("#bookingTable tbody");
+// HOTELS
+function loadHotels(){
+  let data = JSON.parse(localStorage.getItem("hotels")) || [];
+  let table=document.getElementById("hotelList");
+  table.innerHTML="";
+  data.forEach(h=>{
+    table.innerHTML+=`
+      <tr>
+        <td>${h.hotel}</td>
+        <td>${h.manager}</td>
+        <td>${h.email}</td>
+        <td>${h.phone}</td>
+        <td>${h.status}</td>
+      </tr>`;
+  });
+}
+
+// ENQUIRIES
+function loadEnquiries(){
+  let data = JSON.parse(localStorage.getItem("enquiries")) || [];
+  let table=document.getElementById("enquiryList");
+  table.innerHTML="";
+  data.forEach((e,i)=>{
+    table.innerHTML+=`
+      <tr>
+        <td>${e.name}</td>
+        <td>${e.msg}</td>
+        <td><button onclick="deleteEnquiry(${i})">Delete</button></td>
+      </tr>`;
+  });
+}
+function deleteEnquiry(i){
+  let data = JSON.parse(localStorage.getItem("enquiries"));
+  data.splice(i,1);
+  localStorage.setItem("enquiries",JSON.stringify(data));
+  loadEnquiries();
+}
+
+// REVIEWS
+function loadReviews(){
+  let data = JSON.parse(localStorage.getItem("reviews")) || [];
+  let table=document.getElementById("reviewList");
+  table.innerHTML="";
+  data.forEach(r=>{
+    table.innerHTML+=`
+      <tr>
+        <td>${r.user}</td>
+        <td>${r.review}</td>
+        <td>${r.rating}⭐</td>
+      </tr>`;
+  });
+}
+
+// MAINTENANCE
+function loadMaintenance(){
+  let data = JSON.parse(localStorage.getItem("maintenance")) || [];
+  let table=document.getElementById("maintenanceList");
+  table.innerHTML="";
+  data.forEach((m,i)=>{
+    table.innerHTML+=`
+      <tr>
+        <td>${m.hotel}</td>
+        <td>${m.issue}</td>
+        <td>${m.status}</td>
+        <td><button onclick="fix(${i})">Fix</button></td>
+      </tr>`;
+  });
+}
+function fix(i){
+  let data = JSON.parse(localStorage.getItem("maintenance"));
+  data[i].status="Fixed";
+  localStorage.setItem("maintenance",JSON.stringify(data));
+  loadMaintenance();
+}
+
+if(!localStorage.getItem("hotelRequests")){
+  const data = [
+    {hotel:"Sunrise Inn", manager:"Kiran", email:"kiran@gmail.com", phone:"987654", status:"Pending"},
+    {hotel:"Ocean View", manager:"Arjun", email:"arjun@gmail.com", phone:"123456", status:"Pending"}
+  ];
+  localStorage.setItem("hotelRequests", JSON.stringify(data));
+}
+function loadHotelRequests(){
+  const data = JSON.parse(localStorage.getItem("hotelRequests"));
+  const table = document.getElementById("hotelRequestList");
   table.innerHTML = "";
 
-  hotels.forEach((b, index) => {
+  data.forEach((h,i)=>{
     table.innerHTML += `
       <tr>
-        <td>${b.manager}</td>
-        <td>${b.hotel}</td>
-         <td>${h.phone}</td>
+        <td>${h.hotel}</td>
+        <td>${h.manager}</td>
         <td>${h.email}</td>
-        <td>${b.status}</td>
+        <td>${h.phone}</td>
+        <td>${h.status}</td>
         <td>
-          <button onclick="approve(${index})">Approve</button>
-          <button onclick="reject(${index})">Reject</button>
+          <button onclick="approveHotel(${i})">Approve</button>
+          <button onclick="rejectHotel(${i})">Reject</button>
         </td>
       </tr>
     `;
   });
-}
+}function approveHotel(i){
+  let requests = JSON.parse(localStorage.getItem("hotelRequests"));
+  let hotels = JSON.parse(localStorage.getItem("hotels")) || [];
 
-function approve(i) {
-  let hotels = JSON.parse(localStorage.getItem("hotels"));
-  hotels[i].status = "Approved";
-  localStorage.setItem("bookings", JSON.stringify(hotels));
+  requests[i].status = "Approved";
+
+  // Move to hotels list
+  hotels.push(requests[i]);
+
+  localStorage.setItem("hotelRequests", JSON.stringify(requests));
+  localStorage.setItem("hotels", JSON.stringify(hotels));
+
+  loadHotelRequests();
   loadHotels();
 }
 
-function reject(i) {
-  let hotels = JSON.parse(localStorage.getItem("hotels"));
-  hotels[i].status = "Rejected";
-  localStorage.setItem("bookings", JSON.stringify(hotels));
-  loadHotels();
+function rejectHotel(i){
+  let requests = JSON.parse(localStorage.getItem("hotelRequests"));
+
+  requests[i].status = "Rejected";
+
+  localStorage.setItem("hotelRequests", JSON.stringify(requests));
+
+  loadHotelRequests();
 }
 
-loadHotels();
-
-
-// 🔄 Switch sections
-function showSection(id, element) {
-  document.querySelectorAll('.section').forEach(sec => {
-    sec.classList.remove('active');
-  });
-
-  document.getElementById(id).classList.add('active');
-
-  document.querySelectorAll('.menu').forEach(menu => {
-    menu.classList.remove('active');
-  });
-
-  element.classList.add('active');
-}
-
-// 🚪 Logout
+// LOGOUT
 function logout(){
-  if(confirm("Are you sure you want to logout?")){
-    localStorage.removeItem("isLoggedIn");
-    window.location.href = "index.html";
-  }
+  localStorage.removeItem("isLoggedIn");
+  alert("Logged out");
 }
 
+// LOAD
+loadBookings();
+loadHotels();
+loadEnquiries();
+loadReviews();
+loadMaintenance();
+loadHotelRequests();
 </script>
 
 </body>
+</html>

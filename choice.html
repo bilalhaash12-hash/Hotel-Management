@@ -1,43 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login Choice</title>
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: Arial;
-      background: white;
-      color: black;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1a1f5a, #020833);
     }
 
     .box {
       text-align: center;
       padding: 30px;
-      background: #f1f1f3;
+      background: white;
       border-radius: 12px;
-      backdrop-filter: blur(5px);
+      width: 90%;
+      max-width: 350px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #020833;
     }
 
     button {
-      padding: 12px 25px;
-      margin: 10px;
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
       border: none;
       border-radius: 8px;
       cursor: pointer;
       font-size: 16px;
       transition: 0.3s;
-      
     }
-    button:hover{
-      transform: translateY(-5px);
+
+    button:hover {
+      transform: translateY(-3px);
       background-color: #424eac;
     }
+
     .user {
-      background:#020833;
+      background: #020833;
       color: white;
     }
 
@@ -45,8 +59,25 @@
       background: #020833;
       color: white;
     }
+
+    /* 📱 Mobile optimization */
+    @media (max-width: 480px) {
+      .box {
+        padding: 20px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+
+      button {
+        font-size: 14px;
+        padding: 10px;
+      }
+    }
   </style>
 </head>
+
 <body>
 
 <div class="box">
@@ -56,3 +87,4 @@
 </div>
 
 </body>
+</html>
