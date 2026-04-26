@@ -1,361 +1,504 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel</title>
+<title>Premium Stay - Admin Panel</title>
 
 <style>
+:root {
+  --primary: #020833;
+  --accent: #ffb703;
+  --bg: #f5f7fa;
+  --sidebar-w: 260px;
+}
+
 body {
   margin: 0;
-  font-family: Arial;
-  background: #f4f6f9;
+  font-family: 'Montserrat', sans-serif;
+  background: var(--bg);
+  color: #222;
 }
 
 /* HEADER */
-.container {
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px;
-  background: white;
-  border-bottom: 1px solid #ccc;
+  padding: 15px 30px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .logo {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: bold;
   font-family: 'Bebas Neue', sans-serif;
-}
-
-.menu-btn {
-  font-size: 20px;
-  cursor: pointer;
-  display: none;
+  letter-spacing: 1px;
+  color: var(--primary);
 }
 
 .logout-btn {
-  background: #020833;
+  background: var(--primary);
   color: white;
-  padding: 8px 12px;
+  padding: 10px 20px;
   border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.logout-btn:hover {
+  background: #e63946;
+  transform: translateY(-2px);
 }
 
 /* LAYOUT */
-.admin-container {
+.admin-layout {
   display: flex;
 }
 
 /* SIDEBAR */
 .sidebar {
-  width: 220px;
-  background: #020833;
+  width: var(--sidebar-w);
+  background: var(--primary);
   color: white;
-  min-height: 100vh;
-  padding: 10px;
+  height: calc(100vh - 65px);
+  position: fixed;
+  padding: 30px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.menu {
-  padding: 12px;
-  margin: 5px 0;
+.menu-item {
+  padding: 15px 20px;
+  border-radius: 12px;
   cursor: pointer;
-  background: #020833;
+  transition: 0.3s;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(255, 255, 255, 0.7);
 }
 
-.menu:hover,
-.menu.active {
-  background: #333;
+.menu-item:hover,
+.menu-item.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--accent);
 }
 
-/* CONTENT */
-.content {
+/* CONTENT AREA */
+.main-content {
+  margin-left: var(--sidebar-w);
   flex: 1;
-  padding: 20px;
+  padding: 40px;
 }
-h2{
-    text-align: center;
-     font-family: 'Bebas Neue', sans-serif;
+
+h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  margin-bottom: 25px;
+  color: var(--primary);
+  letter-spacing: 1px;
 }
-.section {
-  display: none;
-}
-.section.active {
-  display: block;
+
+.section { display: none; animation: fadeIn 0.4s ease; }
+.section.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* CARDS */
-.cards {
+.stats-grid {
   display: grid;
-  grid-template-columns: repeat(2,1fr);
-  gap: 15px;
-}
-.card {
-  background: #020833;
-  color: white;
-  padding: 20px;
-  text-align: center;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
 }
 
-/* TABLE */
-.table-scroll {
-  overflow-x: auto;
+.stat-card {
+  background: white;
+  padding: 30px;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  text-align: center;
+  border: 1px solid rgba(0,0,0,0.05);
+  transition: 0.3s;
 }
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+}
+
+.stat-card h3 { font-size: 42px; margin: 0; color: var(--primary); font-family: 'Bebas Neue', sans-serif; }
+.stat-card p { color: #64748b; font-size: 13px; margin-top: 5px; font-weight: 700; letter-spacing: 1px; }
+
+/* TABLE STYLES */
+.table-wrapper {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 15px;
-  min-width: 500px;
 }
-th, td {
-  border: 1px solid #ccc;
-  padding: 10px;
-  text-align: center;
-}
+
 th {
-  background: #020833;
-  color: white;
+  background: #f8fafc;
+  padding: 18px 20px;
+  text-align: left;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #64748b;
+  border-bottom: 1px solid #edf2f7;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
+
+td {
+  padding: 20px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 14px;
+  color: #334155;
+}
+
+tr:last-child td { border-bottom: none; }
+tr:hover { background: #f8fafc; }
+
+.btn-delete {
+  background: #fee2e2;
+  color: #ef4444;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 12px;
+  transition: 0.2s;
+}
+
+.btn-delete:hover { background: #ef4444; color: white; transform: scale(1.05); }
 
 /* MOBILE */
-@media(max-width:768px){
-
-  .menu-btn {
-    display: block;
-  }
-
-  .sidebar {
-    position: fixed;
-    left: -220px;
-    top: 0;
-    height: 100%;
-    transition: 0.3s;
-    z-index: 1000;
-  }
-
-  .sidebar.active {
-    left: 0;
-  }
-
-  .admin-container {
-    flex-direction: column;
-  }
-
-  .cards {
-    grid-template-columns: 1fr;
-  }
-
+@media(max-width: 1024px) {
+  .sidebar { width: 80px; padding: 30px 10px; }
+  .menu-item span { display: none; }
+  .main-content { margin-left: 80px; padding: 20px; }
 }
+
+@media(max-width: 768px) {
+  .header { padding: 15px 20px; }
+  .sidebar {
+    width: 260px;
+    left: -260px;
+    transition: 0.4s ease;
+    z-index: 1001;
+    height: 100vh;
+    top: 0;
+  }
+  .sidebar.active { left: 0; }
+  .main-content { margin-left: 0; padding: 20px 15px; }
+  
+  .mobile-toggle {
+    display: block !important;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--primary);
+  }
+
+  .stats-grid { grid-template-columns: 1fr; }
+  
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    min-width: 700px; /* Force scroll */
+  }
+}
+
+.mobile-toggle { display: none; }
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+}
+.overlay.active { display: block; }
 </style>
 </head>
 
 <body>
 
-<header class="container">
-  <span class="menu-btn" onclick="toggleMenu()">☰</span>
-  <div class="logo">PREMIUM STAY</div>
-  <button class="logout-btn" onclick="logout()">Logout</button>
+<div class="overlay" id="overlay" onclick="toggleMobileMenu()"></div>
+
+<header class="header">
+  <div style="display: flex; align-items: center; gap: 15px;">
+    <div class="mobile-toggle" onclick="toggleMobileMenu()">☰</div>
+    <div class="logo">PREMIUM STAY</div>
+  </div>
+  <button class="logout-btn" onclick="logout()">LOGOUT</button>
 </header>
 
-<div class="admin-container">
+<div class="admin-layout">
+  <nav class="sidebar" id="sidebar">
+    <div class="menu-item active" onclick="showSection('dashboard', this)"><span>🏠</span> <span>DASHBOARD</span></div>
+    <div class="menu-item" onclick="showSection('hotels', this)"><span>🏨</span> <span>HOTELS</span></div>
+    <div class="menu-item" onclick="showSection('enquiries', this)"><span>📩</span> <span>ENQUIRIES</span></div>
+    <div class="menu-item" onclick="showSection('reviews', this)"><span>⭐</span> <span>REVIEWS</span></div>
+    <div class="menu-item" onclick="showSection('maintenance', this)"><span>⚙️</span> <span>MAINTENANCE</span></div>
+  </nav>
 
-<div class="sidebar" id="sidebar">
-  <div class="menu active" onclick="showSection('dashboard', this)">DASHBOARD</div>
-  <div class="menu" onclick="showSection('hotels', this)">HOTELS</div>
-  <div class="menu" onclick="showSection('enquiries', this)">ENQUIRIES</div>
-  <div class="menu" onclick="showSection('reviews', this)">REVIEWS</div>
-  <div class="menu" onclick="showSection('maintenance', this)">MAINTENANCE</div>
-  <div class="menu" onclick="showSection('hotelRequests', this)">HOTEL REQUESTS</div>
-</div>
+  <main class="main-content">
+    
+    <section id="dashboard" class="section active">
+      <h2>General Dashboard</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3 id="totalBookings">0</h3>
+          <p>TOTAL BOOKINGS</p>
+        </div>
+        <div class="stat-card">
+          <h3 id="totalRevenue">₹0</h3>
+          <p>TOTAL REVENUE</p>
+        </div>
+        <div class="stat-card" onclick="showSection('enquiries', document.querySelector('.menu-item:nth-child(3)'))" style="cursor:pointer">
+          <h3 id="totalEnquiries">0</h3>
+          <p>NEW ENQUIRIES</p>
+        </div>
+      </div>
 
-<div class="content">
+      <h2>New Enquiries (Recent)</h2>
+      <div class="table-wrapper" style="margin-bottom: 30px;">
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Email</th><th>Phone</th><th>Message</th></tr>
+          </thead>
+          <tbody id="recentEnquiryList"></tbody>
+        </table>
+      </div>
 
-<!-- DASHBOARD -->
-<section id="dashboard" class="section active">
-     <h2>DASHBOARD</h2>
-<div class="cards">
-  <div class="card">
-    <h3 id="totalBookings">0</h3>
-    <p>Bookings</p>
-  </div>
-  <div class="card">
-    <h3 id="totalRevenue">₹0</h3>
-    <p>Revenue</p>
-  </div>
-</div>
+      <h2>Recent Bookings</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Hotel</th><th>Date</th><th>Price</th><th>Action</th></tr>
+          </thead>
+          <tbody id="bookingList"></tbody>
+        </table>
+      </div>
+    </section>
 
-<div class="table-scroll">
-     <h2>BOOKINGS</h2>
-<table>
-<tr><th>Name</th><th>Hotel</th><th>Date</th><th>Count</th><th>Price</th><th>Action</th></tr>
-<tbody id="bookingList"></tbody>
-</table>
-</div>
-</section>
+    <!-- ENQUIRIES -->
+    <section id="enquiries" class="section">
+      <h2>Customer Enquiries</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Email</th><th>Phone</th><th>Message</th><th style="text-align:right">Action</th></tr>
+          </thead>
+          <tbody id="enquiryList"></tbody>
+        </table>
+      </div>
+    </section>
 
-<!-- HOTELS -->
-<section id="hotels" class="section">
-     <h2>HOTEL DETAILS</h2>
-<div class="table-scroll">
-<table>
-<tr><th>Hotel</th><th>Manager</th><th>Email</th><th>Phone</th><th>Status</th></tr>
-<tbody id="hotelList"></tbody>
-</table>
-</div>
-</section>
+    <!-- HOTELS -->
+    <section id="hotels" class="section">
+      <h2>Managed Hotels</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>Hotel Name</th><th>Manager</th><th>Email</th><th>Phone</th><th>Status</th></tr>
+          </thead>
+          <tbody id="hotelList"></tbody>
+        </table>
+      </div>
+    </section>
 
-<!-- ENQUIRIES -->
-<section id="enquiries" class="section">
-     <h2>ENQUIRIES</h2>
-<div class="table-scroll">
-<table>
-<tr><th>Name</th><th>Message</th><th>Action</th></tr>
-<tbody id="enquiryList"></tbody>
-</table>
-</div>
-</section>
+    <!-- REVIEWS -->
+    <section id="reviews" class="section">
+      <h2>Guest Feedback</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>User</th><th>Review</th><th>Rating</th></tr>
+          </thead>
+          <tbody id="reviewList"></tbody>
+        </table>
+      </div>
+    </section>
 
-<!-- REVIEWS -->
-<section id="reviews" class="section">
-     <h2>USER RIVIES</h2>
-<div class="table-scroll">
-<table>
-<tr><th>User</th><th>Review</th><th>Rating</th></tr>
-<tbody id="reviewList"></tbody>
-</table>
-</div>
-</section>
+    <!-- MAINTENANCE -->
+    <section id="maintenance" class="section">
+      <h2>Maintenance Logs</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>Hotel</th><th>Issue</th><th>Status</th><th>Action</th></tr>
+          </thead>
+          <tbody id="maintenanceList"></tbody>
+        </table>
+      </div>
+    </section>
 
-<!-- MAINTENANCE -->
-<section id="maintenance" class="section">
-    <h2>MAINTENANCE</h2>
-<div class="table-scroll">
-<table>
-<tr><th>Hotel</th><th>Issue</th><th>Status</th><th>Action</th></tr>
-<tbody id="maintenanceList"></tbody>
-</table>
-</div>
-</section>
-
-<section id="hotelRequests" class="section">
-    <h2>HOTEL REQUESTS</h2>
-<div class="table-scroll">
-<table>
-<tr>
-  <th>Hotel</th>
-  <th>Manager</th>
-  <th>Email</th>
-  <th>Phone</th>
-  <th>Status</th>
-  <th>Action</th>
-</tr>
-<tbody id="hotelRequestList"></tbody>
-</table>
-</div>
-</section>
-
-</div>
+  </main>
 </div>
 
 <script>
-
-// SIDEBAR TOGGLE
-function toggleMenu(){
-  document.getElementById("sidebar").classList.toggle("active");
-}
-
-// SWITCH SECTION
+// SIDEBAR SWITCH
 function showSection(id, el){
   document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
-
-  document.querySelectorAll(".menu").forEach(m=>m.classList.remove("active"));
+  document.querySelectorAll(".menu-item").forEach(m=>m.classList.remove("active"));
   el.classList.add("active");
+  
+  // Auto-close on mobile
+  if(window.innerWidth <= 768) {
+    toggleMobileMenu();
+  }
+}
 
-  document.getElementById("sidebar").classList.remove("active");
+function toggleMobileMenu() {
+  document.getElementById("sidebar").classList.toggle("active");
+  document.getElementById("overlay").classList.toggle("active");
+}
+
+// DATA LOADING
+function loadAll() {
+  loadBookings();
+  loadEnquiries();
+  loadHotels();
+  loadReviews();
+  loadMaintenance();
+}
+
+// FIX: Enquiry Variable Bug
+function loadEnquiries(){
+  const enquiries = JSON.parse(localStorage.getItem("enquiries")) || [];
+  const table = document.getElementById("enquiryList");
+  const recentTable = document.getElementById("recentEnquiryList");
+  const countDisplay = document.getElementById("totalEnquiries");
+  
+  if(countDisplay) countDisplay.innerText = enquiries.filter(e => e.status === "pending").length || enquiries.length;
+
+  table.innerHTML = "";
+  if(recentTable) recentTable.innerHTML = "";
+
+  if (enquiries.length === 0) {
+    const emptyRow = "<tr><td colspan='5' style='text-align:center; padding: 40px; color: #888;'>No enquiries found.</td></tr>";
+    table.innerHTML = emptyRow;
+    if(recentTable) recentTable.innerHTML = emptyRow;
+    return;
+  }
+
+  // Populate main list
+  enquiries.forEach((e, i) => {
+    const row = `
+      <tr>
+        <td><strong>${e.name}</strong></td>
+        <td>${e.email || "N/A"}</td>
+        <td>${e.phone || "N/A"}</td>
+        <td>${e.message || e.msg || "No message content"}</td>
+        <td style="text-align:right"><button class="btn-delete" onclick="deleteEnquiry(${i})">Delete</button></td>
+      </tr>`;
+    table.innerHTML += row;
+  });
+
+  // Populate recent list (last 3)
+  if(recentTable) {
+    enquiries.slice(-3).reverse().forEach(e => {
+      recentTable.innerHTML += `
+        <tr>
+          <td><strong>${e.name}</strong></td>
+          <td>${e.email || "N/A"}</td>
+          <td>${e.phone || "N/A"}</td>
+          <td>${e.message || e.msg || "No message content"}</td>
+        </tr>`;
+    });
+  }
+}
+
+function deleteEnquiry(i){
+  if(confirm("Delete this enquiry?")) {
+    let data = JSON.parse(localStorage.getItem("enquiries"));
+    data.splice(i,1);
+    localStorage.setItem("enquiries", JSON.stringify(data));
+    loadEnquiries();
+  }
 }
 
 // BOOKINGS
-let bookings = JSON.parse(localStorage.getItem("bookings")) || [
-  {name:"Ali", hotel:"Sea View", date:jan23 ,count:2 , price:2000},
-  {name:"Rahul", hotel:"Grand", date:jan14 ,count:3 , price:3500}
-];
-
 function loadBookings(){
+  let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
   let table = document.getElementById("bookingList");
-  table.innerHTML="";
-  let total=0;
-
-  bookings.forEach((b,i)=>{
-    total+=b.price;
-    table.innerHTML+=`
+  table.innerHTML = "";
+  let total = 0;
+  bookings.forEach((b, i) => {
+    total += parseFloat(b.price) || 0;
+    table.innerHTML += `
       <tr>
         <td>${b.name}</td>
         <td>${b.hotel}</td>
-        <td>${b.date}</td>
-        <td>${b.count}</td>
+        <td>${b.date || "N/A"}</td>
         <td>₹${b.price}</td>
-        <td><button onclick="deleteBooking(${i})">Delete</button></td>
+        <td><button class="btn-delete" onclick="deleteBooking(${i})">Delete</button></td>
       </tr>`;
   });
-
-  document.getElementById("totalBookings").innerText=bookings.length;
-  document.getElementById("totalRevenue").innerText="₹"+total;
+  document.getElementById("totalBookings").innerText = bookings.length;
+  document.getElementById("totalRevenue").innerText = "₹" + total;
 }
+
 function deleteBooking(i){
+  let bookings = JSON.parse(localStorage.getItem("bookings"));
   bookings.splice(i,1);
-  localStorage.setItem("bookings",JSON.stringify(bookings));
+  localStorage.setItem("bookings", JSON.stringify(bookings));
   loadBookings();
 }
 
 // HOTELS
 function loadHotels(){
   let data = JSON.parse(localStorage.getItem("hotels")) || [];
-  let table=document.getElementById("hotelList");
-  table.innerHTML="";
-  data.forEach(h=>{
-    table.innerHTML+=`
+  let table = document.getElementById("hotelList");
+  table.innerHTML = "";
+  data.forEach(h => {
+    table.innerHTML += `
       <tr>
-        <td>${h.hotel}</td>
+        <td><strong>${h.hotel}</strong></td>
         <td>${h.manager}</td>
         <td>${h.email}</td>
         <td>${h.phone}</td>
-        <td>${h.status}</td>
+        <td><span style="color: ${h.status === 'Active' ? '#10b981' : '#f59e0b'}; font-weight: 600;">${h.status}</span></td>
       </tr>`;
   });
-}
-
-// ENQUIRIES
-function loadEnquiries(){
-  let data = JSON.parse(localStorage.getItem("enquiries")) || [];
-  let table=document.getElementById("enquiryList");
-  table.innerHTML="";
-  data.forEach((e,i)=>{
-    table.innerHTML+=`
-      <tr>
-        <td>${e.name}</td>
-        <td>${e.msg}</td>
-        <td><button onclick="deleteEnquiry(${i})">Delete</button></td>
-      </tr>`;
-  });
-}
-function deleteEnquiry(i){
-  let data = JSON.parse(localStorage.getItem("enquiries"));
-  data.splice(i,1);
-  localStorage.setItem("enquiries",JSON.stringify(data));
-  loadEnquiries();
 }
 
 // REVIEWS
 function loadReviews(){
   let data = JSON.parse(localStorage.getItem("reviews")) || [];
-  let table=document.getElementById("reviewList");
-  table.innerHTML="";
-  data.forEach(r=>{
-    table.innerHTML+=`
+  let table = document.getElementById("reviewList");
+  table.innerHTML = "";
+  data.forEach(r => {
+    table.innerHTML += `
       <tr>
-        <td>${r.user}</td>
-        <td>${r.review}</td>
-        <td>${r.rating}⭐</td>
+        <td><strong>${r.user}</strong></td>
+        <td>"${r.review}"</td>
+        <td style="color: #ffb703; font-weight: bold;">${r.rating} ⭐</td>
       </tr>`;
   });
 }
@@ -363,92 +506,36 @@ function loadReviews(){
 // MAINTENANCE
 function loadMaintenance(){
   let data = JSON.parse(localStorage.getItem("maintenance")) || [];
-  let table=document.getElementById("maintenanceList");
-  table.innerHTML="";
-  data.forEach((m,i)=>{
-    table.innerHTML+=`
+  let table = document.getElementById("maintenanceList");
+  table.innerHTML = "";
+  data.forEach((m, i) => {
+    table.innerHTML += `
       <tr>
         <td>${m.hotel}</td>
         <td>${m.issue}</td>
-        <td>${m.status}</td>
-        <td><button onclick="fix(${i})">Fix</button></td>
+        <td><span style="font-weight: 600; color: ${m.status === 'Fixed' ? '#10b981' : '#f59e0b'}">${m.status}</span></td>
+        <td><button class="btn-delete" style="background: #dcfce7; color: #16a34a;" onclick="fix(${i})">Mark Fixed</button></td>
       </tr>`;
   });
 }
+
 function fix(i){
   let data = JSON.parse(localStorage.getItem("maintenance"));
-  data[i].status="Fixed";
-  localStorage.setItem("maintenance",JSON.stringify(data));
+  data[i].status = "Fixed";
+  localStorage.setItem("maintenance", JSON.stringify(data));
   loadMaintenance();
-}
-
-if(!localStorage.getItem("hotelRequests")){
-  const data = [
-    {hotel:"Sunrise Inn", manager:"Kiran", email:"kiran@gmail.com", phone:"987654", status:"Pending"},
-    {hotel:"Ocean View", manager:"Arjun", email:"arjun@gmail.com", phone:"123456", status:"Pending"}
-  ];
-  localStorage.setItem("hotelRequests", JSON.stringify(data));
-}
-function loadHotelRequests(){
-  const data = JSON.parse(localStorage.getItem("hotelRequests"));
-  const table = document.getElementById("hotelRequestList");
-  table.innerHTML = "";
-
-  data.forEach((h,i)=>{
-    table.innerHTML += `
-      <tr>
-        <td>${h.hotel}</td>
-        <td>${h.manager}</td>
-        <td>${h.email}</td>
-        <td>${h.phone}</td>
-        <td>${h.status}</td>
-        <td>
-          <button onclick="approveHotel(${i})">Approve</button>
-          <button onclick="rejectHotel(${i})">Reject</button>
-        </td>
-      </tr>
-    `;
-  });
-}function approveHotel(i){
-  let requests = JSON.parse(localStorage.getItem("hotelRequests"));
-  let hotels = JSON.parse(localStorage.getItem("hotels")) || [];
-
-  requests[i].status = "Approved";
-
-  // Move to hotels list
-  hotels.push(requests[i]);
-
-  localStorage.setItem("hotelRequests", JSON.stringify(requests));
-  localStorage.setItem("hotels", JSON.stringify(hotels));
-
-  loadHotelRequests();
-  loadHotels();
-}
-
-function rejectHotel(i){
-  let requests = JSON.parse(localStorage.getItem("hotelRequests"));
-
-  requests[i].status = "Rejected";
-
-  localStorage.setItem("hotelRequests", JSON.stringify(requests));
-
-  loadHotelRequests();
 }
 
 // LOGOUT
 function logout(){
-  localStorage.removeItem("isLoggedIn");
-  alert("Logged out");
+  if(confirm("Logout from Admin Panel?")) {
+    localStorage.removeItem("isLoggedIn");
+    window.location.href = "index.html";
+  }
 }
 
-// LOAD
-loadBookings();
-loadHotels();
-loadEnquiries();
-loadReviews();
-loadMaintenance();
-loadHotelRequests();
+// INIT
+loadAll();
 </script>
-
 </body>
 </html>

@@ -590,12 +590,26 @@ body {
 
   .container {
     flex-direction: column;
-    gap: 10px;
+    padding: 15px 20px;
+    gap: 15px;
+  }
+
+  .logo {
+    font-size: 24px;
   }
 
   .nav-links {
-    flex-wrap: wrap;
-    justify-content: center;
+    gap: 15px;
+    padding: 0;
+  }
+
+  .nav-links li a {
+    font-size: 14px;
+    gap: 2px;
+  }
+
+  .nav-links li a i {
+    font-size: 16px;
   }
 
   .hero {
@@ -639,5 +653,89 @@ body {
 @media (max-width: 480px) {
   .hero-content h1 {
     font-size: 22px;
+  }
+}
+/* ENQUIRY SECTION */
+.enquiry-section {
+  padding: 70px 10%;
+  background: white;
+  text-align: center;
+}
+
+.enquiry-section h2 {
+  font-size: 36px;
+  margin-bottom: 40px;
+  color: #03052d;
+  font-family: 'Bebas Neue', sans-serif;
+}
+
+.enquiry-container {
+  max-width: 800px;
+  margin: auto;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.enquiry-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.enquiry-form input,
+.enquiry-form textarea {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 16px;
+  background: #f9f9f9;
+  transition: 0.3s;
+}
+
+.enquiry-form textarea {
+  grid-column: span 2;
+  height: 120px;
+  resize: none;
+}
+
+.enquiry-form input:focus,
+.enquiry-form textarea:focus {
+  border-color: #0f4c81;
+  background: white;
+  outline: none;
+  box-shadow: 0 0 10px rgba(15, 76, 129, 0.1);
+}
+
+.enquiry-form button {
+  grid-column: span 2;
+  padding: 15px;
+  background: #03052d;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.enquiry-form button:hover {
+  background: #ffb703;
+  color: #03052d;
+  transform: translateY(-3px);
+}
+
+@media (max-width: 600px) {
+  .enquiry-form {
+    grid-template-columns: 1fr;
+  }
+  .enquiry-form textarea,
+  .enquiry-form button {
+    grid-column: span 1;
   }
 }

@@ -15,7 +15,7 @@
     <nav>
       <ul class="nav-links">
         <li><a href="index.html" class="login-btn"><i class="fas fa-home"></i>Home</a></li>
-        <li><a href="feature.html"class="login-btn"><i class="fas fa-star"></i>Featuer</a></li>
+        <li><a href="feature.html" class="login-btn"><i class="fas fa-star"></i>Feature</a></li>
         <li><a href="overview.html"class="login-btn"><i class="fas fa-eye"></i>Overview</a></li>
         <li><a href="contact.html" class="login-btn"><i class="fas fa-phone"></i>Contact</a></li>
         <button class="login-btn" onclick="window.location.href='choice.html'">LOGIN</button>
@@ -235,7 +235,23 @@
     </div>
   </section>
 
+
+  <section class="enquiry-section">
+    <h2>Send Us an Enquiry</h2>
+    <div class="enquiry-container">
+      <form class="enquiry-form" id="enquiryForm">
+        <input type="text" id="enq-name" placeholder="Full Name" required>
+        <input type="email" id="enq-email" placeholder="Email Address" required>
+        <input type="tel" id="enq-phone" placeholder="Phone Number" required>
+        <input type="text" id="enq-subject" placeholder="Subject" required>
+        <textarea id="enq-message" placeholder="Message" required></textarea>
+        <button type="submit">Submit Enquiry</button>
+      </form>
+    </div>
+  </section>
+
 <footer class="footer">
+
     <div class="footer-brand">
       <h2>PREMIUM STAY</h2>
       <p>
@@ -386,6 +402,41 @@ function bookNow() {
 function goToChoice() {
   window.location.href = "choice.html";
 }
+
+// ENQUIRY FORM LOGIC
+document.getElementById("enquiryForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  
+  const name = document.getElementById("enq-name").value.trim();
+  const email = document.getElementById("enq-email").value.trim();
+  const phone = document.getElementById("enq-phone").value.trim();
+  const subject = document.getElementById("enq-subject").value.trim();
+  const message = document.getElementById("enq-message").value.trim();
+  
+  // Validation (extra checks if needed)
+  if (!name || !email || !phone || !message) {
+    alert("Please fill all fields correctly.");
+    return;
+  }
+  
+  const enquiries = JSON.parse(localStorage.getItem("enquiries")) || [];
+  const newEnquiry = {
+    id: Date.now(),
+    name,
+    email,
+    phone,
+    subject,
+    message,
+    status: "pending",
+    created_at: new Date().toLocaleString()
+  };
+  
+  enquiries.push(newEnquiry);
+  localStorage.setItem("enquiries", JSON.stringify(enquiries));
+  
+  alert("Thank you! Your enquiry has been submitted. We will contact you soon.");
+  this.reset();
+});
 </script>
 </body>
 </html>  

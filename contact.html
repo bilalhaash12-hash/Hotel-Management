@@ -16,7 +16,7 @@
   <nav>
     <ul class="nav-links">
       <li><a href="index.html" class="login-btn"><i class="fas fa-home"></i>Home</a></li>
-      <li><a href="feature.html" class="login-btn"><i class="fas fa-star"></i>Featuer</a></li>
+      <li><a href="feature.html" class="login-btn"><i class="fas fa-star"></i>Feature</a></li>
       <li><a href="overview.html"class="login-btn"><i class="fas fa-eye"></i>Overview</a></li>
       <li><a href="contact.html" class="login-btn"><i class="fas fa-phone"></i>Contact</a></li>
     </ul>
@@ -173,4 +173,37 @@
     <p>© 2026 PREMIUM STAY | Designed for smarter hospitality</p>
   </div>
 </footer>
+<script>
+function sendMessage(event) {
+  event.preventDefault();
+
+  const name = document.getElementById("fullname").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const message = document.getElementById("message").value.trim();
+
+  if (!name || !email || !phone || !message) {
+    alert("Please fill all required fields.");
+    return;
+  }
+
+  const enquiries = JSON.parse(localStorage.getItem("enquiries")) || [];
+  const newEnquiry = {
+    id: Date.now(),
+    name,
+    email,
+    phone,
+    subject: "Contact Form Enquiry",
+    message,
+    status: "pending",
+    created_at: new Date().toLocaleString()
+  };
+
+  enquiries.push(newEnquiry);
+  localStorage.setItem("enquiries", JSON.stringify(enquiries));
+
+  alert("Message sent successfully! We will contact you soon.");
+  event.target.reset();
+}
+</script>
 </body>
