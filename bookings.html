@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hotel Admin - Bookings</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="shared.css">
+<style>
+/* Page specific styles for Bookings Management */
+.container { padding: 0; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+.stat-card {
+  background: #020830;
+  padding: 20px;
+  color: white;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.stat-card h2 { margin: 10px 0; color: #3b82f6; font-size: 28px; }
+.stat-card p { margin: 0; opacity: 0.8; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: #020830;
+  color: white;
+  border-radius: 15px;
+  overflow: hidden;
+}
+th, td { padding: 15px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+th { background: rgba(255,255,255,0.1); text-transform: uppercase; font-size: 12px; }
+tr:hover { background: rgba(255,255,255,0.05); }
+
+.status-badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.status-confirmed { background: #dcfce7; color: #166534; }
+.status-cancelled { background: #fee2e2; color: #991b1b; }
+
+.action-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  background: #ef4444;
+  color: white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<div class="topbar">
+  <div class="left-info">
+    <h2 class="logo">Hotel Admin</h2>
+    <a id="managerInfo" href="#">Manager:</a>
+    <a id="emailInfo" href="#">Email</a>
+    <a id="phoneInfo" href="#">Phone</a>
+    <a id="whatsappLink" href="#" target="_blank">WhatsApp</a>
+  </div>
+  <div class="center-info">
+    <div class="mobile-toggle" onclick="toggleMenu()">☰</div>
+    <span id="hotelName">Hotel Name</span>
+  </div>
+  <div class="user-info">
+    <span id="greeting">Hi 👋 User</span>
+  </div>
+</div>
+
+<div class="sidebar" id="sidebar">
+  <ul class="menu">
+    <li class="menu-item">
+      <a href="topbar.html"><span>🏠</span> <span class="text">Dashboard</span></a>
+    </li>
+    <li class="menu-item">
+      <a href="bookings.html"><span>📅</span> <span class="text">Bookings</span></a>
+    </li>
+    <li class="menu-item">
+      <a href="card.html"><span>🛏</span> <span class="text">Rooms</span></a>
+    </li>
+    <li class="menu-item">
+      <a href="guest.html"><span>👥</span> <span class="text">Guests</span></a>
+    </li>
+    <li class="menu-item">
+      <a href="payment.html"><span>💳</span> <span class="text">Payments</span></a>
+    </li>
+    <li class="menu-item">
+      <a href="#"><span>⭐</span> <span class="text">Reviews</span></a>
+    </li>
+    <li class="menu-item">
+      <a href="enquiry.html"><span>📧</span> <span class="text">Enquiries</span></a>
+    </li>
+    <li class="menu-item">
+      <a href="#"><span>⚙</span> <span class="text">Settings</span></a>
+    </li>
+  </ul>
+  <div class="logout-container">
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+</div>
+
+<div class="main-content">
+  <h1>Booking Management</h1>
+  <p>Overview of all room and hotel bookings.</p>
+
+  <div class="container">
+    <div class="stats">
+      <div class="stat-card">
+        <p>Total Bookings</p>
+        <h2 id="totalBookings">0</h2>
+      </div>
+      <div class="stat-card">
+        <p>Today's Check-ins</p>
+        <h2 id="todayCheckins">0</h2>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Guest</th>
+          <th>Hotel/Room</th>
+          <th>Date & Time</th>
+          <th>Guests</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="bookingTable">
+        <!-- Bookings will be loaded here -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script src="admin-scripts.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  loadBookings();
+});
+
+function loadBookings() {
+  const userData = JSON.parse(localStorage.getItem("user")) || {};
+  const currentHotel = userData.hotel || "";
+
+  const allBookings = JSON.parse(localStorage.getItem("bookings")) || [];
+  
+  // Filter for THIS hotel only
+  const bookings = allBookings.filter(b => b.hotel === currentHotel || !b.hotel);
+
+  const table = document.getElementById("bookingTable");
+  table.innerHTML = "";
+  
+  document.getElementById("totalBookings").textContent = bookings.length;
+  
+  // Simple check-in count for today
+  const today = new Date().toISOString().split('T')[0];
+  const todayCount = bookings.filter(b => b.date === today).length;
+  document.getElementById("todayCheckins").textContent = todayCount;
+
+  if (bookings.length === 0) {
+    table.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 30px;">No bookings found.</td></tr>`;
+    return;
+  }
+
+  bookings.sort((a, b) => b.id - a.id);
+
+    bookings.forEach((b, i) => {
+      table.innerHTML += `
+        <tr>
+          <td>
+            <div style="font-weight: bold;">${b.name}</div>
+            <div style="font-size: 12px; opacity: 0.7;">Booked on: ${b.created_at}</div>
+          </td>
+          <td>
+            <div>${b.hotel || "Standard Room"}</div>
+            <div style="font-size: 12px; color: #3b82f6; font-weight: bold;">${b.days || 1} Days Stay</div>
+          </td>
+          <td>${b.date} at ${b.time}</td>
+          <td>${b.guests} Guests (${b.adults} Adults)</td>
+          <td><span class="status-badge status-${b.status.toLowerCase()}">${b.status}</span></td>
+          <td>
+            <button class="action-btn" onclick="deleteBooking(${b.id})">Delete</button>
+          </td>
+        </tr>
+      `;
+    });
+}
+
+function deleteBooking(id) {
+  if (confirm("Are you sure you want to delete this booking?")) {
+    let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+    bookings = bookings.filter(b => b.id !== id);
+    localStorage.setItem("bookings", JSON.stringify(bookings));
+    loadBookings();
+  }
+}
+</script>
+
+</body>
+</html>

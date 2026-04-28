@@ -1,491 +1,238 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-  <title>Hotel Guest Management</title>
-  <style>
-    body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background:  #f5f7fa;
-}
-
-.topbar {
+<meta charset="UTF-8">
+<title>Hotel Admin - Guest Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="shared.css">
+<style>
+/* Page specific styles for Guest Management */
+h1 { margin-top: 20px; }
+.summary {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  align-items: center;
-  padding: 20px 20px;
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(6px);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  font-family: 'Montserrat', sans-serif;
-  position: relative;
-  z-index: 1000;
-   border-bottom: 1px solid black;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
 }
-.left-info {
-  display: flex;
-  flex-direction: column;  
-  align-items: flex-start;
-  gap: 0;                  
-}
-.left-info a {
-  display: flex;
-  flex-direction: column;
-  font-size: 13px;
-  color: black;
-  text-decoration: none;
-  gap: 2px;
-  margin: 2px 0;
-}
-.logo {
-  margin: 0;              
-  padding: 0;
-  font-size: 22px;
-  font-weight: bold;
-  line-height: 1.2;       
-}
-.left-info a:hover {
-  color: #1e90ff;
-}
-
-.center-info {
+.stat-card {
+  background: #020833;
+  padding: 20px;
+  color: white;
+  border-radius: 15px;
   text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
+.stat-card h2 { margin: 10px 0; font-size: 28px; }
+.table-box { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-top: 20px; }
+.form-table, .list-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+.form-table th, .list-table th { background: #1a1f5a; color: white; padding: 12px; }
+.form-table td, .list-table td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+.form-table input, .form-table select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+.add-btn { padding: 10px 20px; background: #22c55e; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+.add-btn:hover { background: #16a34a; }
+tr:nth-child(even) { background: #f9fafb; }
 
-#hotelName {
-  font-size: 30px;
-  font-weight: 700;
-  color: black;
-  font-family: 'Pacifico', cursive;
-}
-.user-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
-  transition: 0.3s ease;
-}
-.user-info:hover {
-  transform: translateY(-3px);
-}
-#managerName {
-  font-weight: 600;
-  color: #6a0dad;
-  text-decoration: underline;
-}
-#greeting {
-  font-size: 15px;
-  font-weight: 600;
-  color: #111;
-}
-.top-back-btn {
-  margin-top: 5px;
-  background: #020830;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 13px;
-  transition: 0.3s;
-  margin-top: 20px;
-  margin-right: 5px;
-}
-
-.top-back-btn:hover {
-  background: #ff9800;
-  color: black;
-}
-
-    h1 {
-      text-align: center;
-       font-family: 'Montserrat', sans-serif;
-    }
-    h3{
-        text-align: center;
-         font-family: 'Montserrat', sans-serif;
-    }
-
-    .summary {
-      display: flex;
-      justify-content: space-around;
-      margin-bottom: 20px;
-    }
-
-    .card {
-      background: rgb(2, 14, 66);
-      padding: 15px 20px;
-      color: white;
-      border-radius: 10px;
-      width: 22%;
-      text-align: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    }
-
-    .card h2 {
-      margin: 10px 0;
-      color:white;
-    }
-
-     .form-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
-}
-.table-box h2{
-    text-align: center;
-}
-.form-table th,
-.form-table td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: center;
-}
-
-.form-table th {
-  background: #1a1f5a;
-  color: white;
-  font-weight: 600;
-}
-
-.form-table input,
-.form-table select {
-  width: 100%;
-  padding: 6px 2px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.form-table button {
-  padding: 8px 12px;
-  background: green;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      margin-top: 10px;
-      border-radius: 10px;
-    }
-
-    th, td {
-      border: 1px solid #ccc;
-      padding: 10px;
-      text-align: center;
-      
-    }
-
-    th {
-      background: #1a1f5a;
-      color: white;
-    }
-
-    tr:nth-child(even) {
-      background: #f2f2f2;
-    }
-
-    input, select {
-      padding: 5px 10px;
-    }
-    
-
-    button {
-      padding: 5px 10px;
-      background: green;
-      color: white;
-      border: none;
-      cursor: pointer;
-      margin-right: 80px;
-    }
-  .back-container {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-}
-
-.back-btn {
-  background: #1a1f5a;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-   border-radius: 50px;
-}
-
-.back-btn:hover {
-  background: #0d133d;
-}
-
-/* 📱 MOBILE + TABLET RESPONSIVE */
 @media (max-width: 768px) {
-
-  /* Topbar stack */
-  .topbar {
-    grid-template-columns: 1fr;
-    text-align: center;
-    gap: 10px;
-  }
-
-  .left-info,
-  .user-info {
-    align-items: center;
-  }
-
-  #hotelName {
-    font-size: 22px;
-  }
-
-  /* Cards full width */
-  .summary {
-    flex-direction: column;
-    gap: 10px;
-    padding: 10px;
-  }
-
-  .card {
-    width: 100%;
-  }
-
-  /* Table scroll (IMPORTANT) */
-  .table-box {
-    overflow-x: auto;
-  }
-
-  table {
-    min-width: 900px; /* keeps layout safe */
-  }
-
-  /* Button fix */
-  button {
-    margin-right: 0;
-    width: 100%;
-  }
-
-  /* Back button center */
-  .top-back-btn {
-    margin: 10px auto;
-  }
+  .summary { grid-template-columns: 1fr; }
+  .table-box { overflow-x: auto; }
+  .form-table, .list-table { min-width: 900px; }
 }
-button, input, select {
-  min-height: 44px;
-  font-size: 14px;
-}
-
 </style>
 </head>
+
 <body>
-  <div class="topbar">
-    <div class="left-info">
-      <h2 class="logo">Hotel Admin</h2>
-      <a id="managerInfo" href="#">Manager:</a>
-      <a id="emailInfo" href="#">Email</a>
-      <a id="phoneInfo" href="#">Phone</a>
-      <a id="whatsappLink" href="#" target="_blank">WhatsApp</a>
-    </div>
-    <div class="center-info">
-      <span id="hotelName">Hotel Name</span>
-    </div>
-    <div class="user-info">
-      <span id="greeting">Hi 👋 User</span>
 
- <a href="topbar.html">
-  <button class="top-back-btn">← Back</button>
-</a>
-</div>
-    </div>
-<h1>HOTEL GUEST MANAGEMENT</h1>
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
-<div class="summary">
-  <div class="card">
-    <h3>Total Rooms</h3>
-    <h2 id="totalRooms">60</h2>
+<div class="topbar">
+  <div class="left-info">
+    <h2 class="logo">Hotel Admin</h2>
+    <a id="managerInfo" href="#">Manager:</a>
+    <a id="emailInfo" href="#">Email</a>
+    <a id="phoneInfo" href="#">Phone</a>
+    <a id="whatsappLink" href="#" target="_blank">WhatsApp</a>
   </div>
-
-  <div class="card">
-    <h3>Available</h3>
-    <h2 id="availableRooms">50</h2>
+  <div class="center-info">
+    <div class="mobile-toggle" onclick="toggleMenu()">☰</div>
+    <span id="hotelName">Hotel Name</span>
   </div>
-
-  <div class="card">
-    <h3>Occupied</h3>
-    <h2 id="occupiedRooms">2</h2>
-  </div>
-
-  <div class="card">
-    <h3>Cleaning</h3>
-    <h2 id="cleaningRooms">8</h2>
+  <div class="user-info">
+    <span id="greeting">Hi 👋 User</span>
   </div>
 </div>
 
-<div class="table-box">
-  <h2 class="table-title">ADD GUEST</h2>
+<div class="sidebar" id="sidebar">
+  <ul class="menu">
+    <li class="menu-item">
+      <a href="topbar.html"><span>🏠</span> <span class="text">Dashboard</span></a>
+    </li>
+    <li class="menu-item">
+      <a href="bookings.html"><span>📅</span> <span class="text">Bookings</span></a>
+    </li>
+    <li class="menu-item">
+      <a href="card.html"><span>🛏</span> <span class="text">Rooms</span></a>
+    </li>
+    <li class="menu-item">
+      <a href="guest.html"><span>👥</span> <span class="text">Guests</span></a>
+    </li>
+    <li class="menu-item">
+      <a href="payment.html"><span>💳</span> <span class="text">Payments</span></a>
+    </li>
+    <li class="menu-item">
+      <a href="#"><span>⭐</span> <span class="text">Reviews</span></a>
+    </li>
+    <li class="menu-item">
+      <a href="enquiry.html"><span>📧</span> <span class="text">Enquiries</span></a>
+    </li>
+    <li class="menu-item">
+      <a href="#"><span>⚙</span> <span class="text">Settings</span></a>
+    </li>
+  </ul>
+  <div class="logout-container">
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+</div>
+
+<div class="main-content">
+  <h1>Guest Management</h1>
   
-<table class="form-table">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Room No</th>
-      <th>Name</th>
-      <th>ID Proof</th>
-      <th>Adults</th>
-      <th>Children</th>
-      <th>Phone</th>
-      <th>Check-In</th>
-      <th>Check-Out</th>
-      <th>Status</th>
-      <th>Action</th>
-    </tr>
-  </thead>
+  <div class="summary">
+    <div class="stat-card">
+      <p>Total Rooms</p>
+      <h2 id="totalRooms">60</h2>
+    </div>
+    <div class="stat-card">
+      <p>Available</p>
+      <h2 id="availableRooms" style="color: #22c55e;">50</h2>
+    </div>
+    <div class="stat-card">
+      <p>Occupied</p>
+      <h2 id="occupiedRooms" style="color: #ef4444;">2</h2>
+    </div>
+    <div class="stat-card">
+      <p>Cleaning</p>
+      <h2 id="cleaningRooms" style="color: #f59e0b;">8</h2>
+    </div>
+  </div>
 
-  <tbody>
-    <tr>
-      <td><input type="number" id="date" placeholder="--/--/--"></td>
-      <td><input type="number" id="room" placeholder="NO."></td>
-      <td><input type="text" id="name" placeholder="Name"></td>
-      <td><input type="text" id="idproof" placeholder="ID"></td>
-      <td><input type="number" id="adults" placeholder="COUNT"></td>
-      <td><input type="number" id="children" placeholder="COUNT"></td>
-      <td><input type="text" id="phone" placeholder="10 digit"></td>
-      <td><input type="time" id="checkin" placeholder="check-in"></td>
-      <td><input type="time" id="checkout" placeholder="check-out "></td>
-      <td>
-        <select id="status">
-          <option>Active</option>
-          <option>Checked-Out</option>
-        </select>
-      </td>
-      <td><button onclick="addGuest()">Add</button></td>
-    </tr>
-  </tbody>
-</table>
+  <div class="table-box">
+    <h3>Add New Guest</h3>
+    <table class="form-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Room</th>
+          <th>Name</th>
+          <th>ID Proof</th>
+          <th>Adults</th>
+          <th>Children</th>
+          <th>Phone</th>
+          <th>Check-In</th>
+          <th>Check-Out</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="date" id="date"></td>
+          <td><input type="text" id="room" placeholder="Room No"></td>
+          <td><input type="text" id="name" placeholder="Guest Name"></td>
+          <td><input type="text" id="idproof" placeholder="ID Details"></td>
+          <td><input type="number" id="adults" value="1"></td>
+          <td><input type="number" id="children" value="0"></td>
+          <td><input type="text" id="phone" placeholder="Phone Number"></td>
+          <td><input type="time" id="checkin"></td>
+          <td><input type="time" id="checkout"></td>
+          <td>
+            <select id="status">
+              <option>Active</option>
+              <option>Checked-Out</option>
+            </select>
+          </td>
+          <td><button class="add-btn" onclick="addGuest()">Add</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-<br>
-
-<table>
-    <h3>GUEST LIST</h3>
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Room No</th>
-      <th>Name</th>
-      <th>ID Proof</th>
-      <th>Adults</th>
-      <th>Children</th>
-      <th>Phone</th>
-      <th>Check-In</th>
-      <th>Check-Out</th>
-      <th>Status</th>
-    </tr>
-  </thead>
-
-  <tbody id="guestTable">
-    <tr>
-      <td>12/06/2014</td>
-      <td>101</td>
-      <td>Ali</td>
-      <td>Aadhar</td>
-      <td>2</td>
-      <td>1</td>
-      <td>9876543210</td>
-      <td>10:00 AM</td>
-      <td>12:00 PM</td>
-      <td>Active</td>
-    </tr>
-
-    <tr>
-      <td>12/06/2014</td>
-      <td>108</td>
-      <td>Pappu</td>
-      <td>Aadhar</td>
-      <td>5</td>
-      <td>6</td>
-      <td>9876543210</td>
-      <td>11:00 AM</td>
-      <td>01:00 PM</td>
-      <td>Checked-Out</td>
-    </tr>
-
-  </tbody>
-</table>
-</div>
-</div></div>
+  <div class="table-box">
+    <h3>Guest List</h3>
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Room</th>
+          <th>Name</th>
+          <th>ID Proof</th>
+          <th>Adults</th>
+          <th>Children</th>
+          <th>Phone</th>
+          <th>Check-In</th>
+          <th>Check-Out</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="guestTable">
+        <!-- Guest entries will appear here -->
+      </tbody>
+    </table>
+  </div>
 </div>
 
-
+<script src="admin-scripts.js"></script>
 <script>
-function addGuest() {
-  let table = document.getElementById("guestTable");
+let guests = JSON.parse(localStorage.getItem("guests")) || [
+  {date: "2026-04-27", room: "101", name: "John Doe", idproof: "Aadhar", adults: 2, children: 1, phone: "9876543210", checkin: "10:00", checkout: "12:00", status: "Active"}
+];
 
-  let row = table.insertRow();
-  row.insertCell(0).innerHTML = document.getElementById("date").value;
-  row.insertCell(1).innerHTML = document.getElementById("room").value;
-  row.insertCell(2).innerHTML = document.getElementById("name").value;
-  row.insertCell(3).innerHTML = document.getElementById("idproof").value;
-  row.insertCell(4).innerHTML = document.getElementById("adults").value;
-  row.insertCell(5).innerHTML = document.getElementById("children").value;
-  row.insertCell(6).innerHTML = document.getElementById("phone").value;
-  row.insertCell(7).innerHTML = document.getElementById("checkin").value;
-  row.insertCell(8).innerHTML = document.getElementById("checkout").value;
-  row.insertCell(9).innerHTML = document.getElementById("status").value;
+function renderGuests() {
+  const table = document.getElementById("guestTable");
+  table.innerHTML = "";
+  guests.forEach(g => {
+    table.innerHTML += `
+      <tr>
+        <td>${g.date}</td>
+        <td>${g.room}</td>
+        <td>${g.name}</td>
+        <td>${g.idproof}</td>
+        <td>${g.adults}</td>
+        <td>${g.children}</td>
+        <td>${g.phone}</td>
+        <td>${g.checkin}</td>
+        <td>${g.checkout}</td>
+        <td><span style="color: ${g.status === 'Active' ? '#22c55e' : '#666'}; font-weight: bold;">${g.status}</span></td>
+      </tr>
+    `;
+  });
+  localStorage.setItem("guests", JSON.stringify(guests));
 }
 
- document.addEventListener("DOMContentLoaded", function () {
-  const data = JSON.parse(localStorage.getItem("user"));
-
-  // ✅ Get current page name
-  const currentPage = window.location.pathname.split("/").pop();
-
-  // ❌ Redirect ONLY if not logged in AND not on allowed pages
-  const publicPages = ["hotelreg.html"]; // pages allowed without login
-
-  if (!data && !publicPages.includes(currentPage)) {
-    window.location.href = "hotelreg.html";
+function addGuest() {
+  const newGuest = {
+    date: document.getElementById("date").value,
+    room: document.getElementById("room").value,
+    name: document.getElementById("name").value,
+    idproof: document.getElementById("idproof").value,
+    adults: document.getElementById("adults").value,
+    children: document.getElementById("children").value,
+    phone: document.getElementById("phone").value,
+    checkin: document.getElementById("checkin").value,
+    checkout: document.getElementById("checkout").value,
+    status: document.getElementById("status").value
+  };
+  
+  if (!newGuest.name || !newGuest.room) {
+    alert("Please enter Name and Room number.");
     return;
   }
-
-  // ✅ If elements exist, then update (prevents errors)
-  if (data) {
-    if (document.getElementById("hotelName")) {
-      document.getElementById("hotelName").textContent = data.hotel || "Hotel";
-    }
-
-    if (document.getElementById("managerInfo")) {
-      document.getElementById("managerInfo").textContent = `Manager: ${data.manager}`;
-    }
-
-    if (document.getElementById("emailInfo")) {
-      document.getElementById("emailInfo").textContent = `Email: ${data.email}`;
-    }
-
-    if (document.getElementById("phoneInfo")) {
-      document.getElementById("phoneInfo").textContent = `Phone: ${data.phone}`;
-    }
-
-    if (document.getElementById("greeting")) {
-      document.getElementById("greeting").textContent = `Hi 👋 ${data.manager}`;
-    }
-
-    if (data.phone && document.getElementById("whatsappLink")) {
-      document.getElementById("whatsappLink").href = `https://wa.me/91${data.phone}`;
-    }
-  }
-});
-document.querySelectorAll(".menu-item a").forEach(link => {
-  if (link.href.includes(window.location.pathname.split("/").pop())) {
-    link.parentElement.classList.add("active");
-  }
-});
-function goTopbar() {
-  window.location.href = "topbar.html";
+  
+  guests.push(newGuest);
+  renderGuests();
 }
+
+renderGuests();
 </script>
 
 </body>

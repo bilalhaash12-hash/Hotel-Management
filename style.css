@@ -118,14 +118,14 @@ body {
   gap: 12px;
   flex-wrap: wrap;
   justify-content: center;
-  max-width: 1000px;
+  max-width: 1200px;
   margin: auto;
 }
 .search-box input{
   padding: 14px;
   border: 1px solid #ccc;
   border-radius: 10px;
-  min-width: 180px;
+  min-width: 150px;
   font-size: 15px;
 }
 
@@ -138,7 +138,7 @@ body {
   padding: 14px;
   border: 1px solid #ccc;
   border-radius: 10px;
-  min-width: 180px;
+  min-width: 150px;
   font-size: 15px;
 }
 .search-box select:hover{

@@ -30,7 +30,16 @@
         <p>Book hotels, rooms and vacation stays with comfort and ease.Experience luxury stays, exclusive deals, and hassle-free reservations—all in one place.</p>
  
         <div class="search-box">
-          <input type="text" placeholder="Location" />
+          <select>
+            <option value="" disabled selected>Locations</option>
+            <option>Kozhikode, Kerala</option>
+            <option>Wayanad, Kerala</option>
+            <option>Kannur, Kerala</option>
+            <option>Kollam, Kerala</option>
+            <option>Munnar, Kerala</option>
+            <option>Kochi, Kerala</option>
+            <option>Trivandrum, Kerala</option>
+          </select>
           <input type="date" />
           <input type="date" />
           <select>
@@ -38,7 +47,14 @@
             <option>1 Guest</option>
             <option>2 Guests</option>
             <option>3 Guests</option>
-            <option>4 Guests</option>
+            <option>4+ Guests</option>
+          </select>
+          <select>
+            <option>Rooms</option>
+            <option>1 Room</option>
+            <option>2 Rooms</option>
+            <option>3 Rooms</option>
+            <option>4+ Rooms</option>
           </select>
           <button>Search</button>
         </div>
@@ -47,11 +63,8 @@
   </section>
 
   <section class="featured-hotels">
-  <h2>Featured Hotels</h2>
-
-  <div class="hotel-container">
-
-    <!-- CARD 1 -->
+  <h2>FEATURED HOTELS</h2>
+  <div class="hotel-container" id="featuredHotelContainer">
     <div class="hotel-card">
       <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa">
       <div class="hotel-info">
@@ -62,8 +75,6 @@
         <button onclick="openModal(this)">View Details</button>
       </div>
     </div>
-
-    <!-- CARD 2 -->
     <div class="hotel-card">
       <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800">
       <div class="hotel-info">
@@ -74,8 +85,6 @@
         <button onclick="openModal(this)">View Details</button>
       </div>
     </div>
-
-    <!-- CARD 3 -->
     <div class="hotel-card">
       <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1200">
       <div class="hotel-info">
@@ -86,8 +95,6 @@
         <button onclick="openModal(this)">View Details</button>
       </div>
     </div>
-
-    <!-- CARD 4 -->
     <div class="hotel-card">
       <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945">
       <div class="hotel-info">
@@ -98,7 +105,6 @@
         <button onclick="openModal(this)">View Details</button>
       </div>
     </div>
-
   </div>
 </section>
 
@@ -118,12 +124,16 @@
       <input type="text" placeholder="Your Name" id="name">
       <input type="number" placeholder="Guests" id="guests">
       <input type="date" id="date">
+      
+      <div style="display: flex; gap: 10px;">
+        <input type="time" id="booking-time" style="flex: 1;">
+        <select id="time" style="flex: 1;">
+          <option>AM</option>
+          <option>PM</option>
+        </select>
+      </div>
 
-      <select id="time">
-        <option>AM</option>
-        <option>PM</option>
-      </select>
-
+      <input type="number" placeholder="Number of Days" id="days">
       <input type="number" placeholder="Adults" id="adults">
 
       <button class="book-btn" onclick="bookNow()">Book Now</button>
@@ -134,7 +144,7 @@
 
   <section>
 <div class="review-section">
-  <h2>Customer Reviews</h2>
+  <h2>CUSTOMER REVIEWS</h2>
   <div class="slider">
     <div class="slide active">
   <p>"Amazing stay! The rooms were clean, staff was very polite, and the food quality was excellent. Highly recommended."</p>
@@ -214,7 +224,7 @@
 </section>
 
   <section class="why-us">
-    <h2>Why Choose Us</h2>
+    <h2>WHY CHOOOSE US</h2>
     <div class="why-container">
       <div class="why-card">
         <h3>Easy Booking</h3>
@@ -232,6 +242,35 @@
         <h3>24/7 Support</h3>
         <p>We’re always here to help you anytime.</p>
       </div>
+       <div class="why-card">
+      <h3>Wide Hotel Selection</h3>
+      <p>Choose from a vast range of hotels, resorts, and homestays to suit every budget and style.</p>
+    </div>
+
+    <div class="why-card">
+      <h3>Instant Confirmation</h3>
+      <p>Get instant booking confirmation and travel worry-free without waiting.</p>
+    </div>
+
+    <div class="why-card">
+      <h3>Flexible Cancellation</h3>
+      <p>Plans changed? No problem. Enjoy flexible cancellation options on most bookings.</p>
+    </div>
+
+    <div class="why-card">
+      <h3>Trusted Reviews</h3>
+      <p>Read genuine reviews from real travelers to make informed decisions.</p>
+    </div>
+    <div class="why-card">
+  <h3>Exclusive Deals</h3>
+  <p>Unlock special discounts and seasonal offers available only on our platform.</p>
+</div>
+
+<div class="why-card">
+  <h3>Seamless Experience</h3>
+  <p>From search to stay, enjoy a smooth and hassle-free booking journey every time.</p>
+</div>
+
     </div>
   </section>
 
@@ -385,16 +424,36 @@ function bookNow() {
   let name = document.getElementById("name").value;
   let guests = document.getElementById("guests").value;
   let date = document.getElementById("date").value;
-  let time = document.getElementById("time").value;
+  let timeVal = document.getElementById("booking-time").value;
+  let period = document.getElementById("time").value;
+  let days = document.getElementById("days").value;
   let adults = document.getElementById("adults").value;
+  let hotelName = document.getElementById("modal-title").innerText;
 
-  if (!name || !guests || !date || !adults) {
+  if (!name || !guests || !date || !adults || !days) {
     alert("Please fill all fields!");
     return;
   }
 
+  const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+  const newBooking = {
+    id: Date.now(),
+    name,
+    guests,
+    date,
+    time: timeVal + " " + period,
+    days,
+    adults,
+    hotel: hotelName,
+    status: "Confirmed",
+    created_at: new Date().toLocaleString()
+  };
+  
+  bookings.push(newBooking);
+  localStorage.setItem("bookings", JSON.stringify(bookings));
+
   alert(
-    `Booking Confirmed!\nName: ${name}\nGuests: ${guests}\nDate: ${date}\nTime: ${time}\nAdults: ${adults}`
+    `Booking Confirmed!\nHotel: ${hotelName}\nName: ${name}\nDays: ${days}\nDate: ${date}\nTime: ${timeVal} ${period}`
   );
 
   closeModal();
@@ -413,7 +472,6 @@ document.getElementById("enquiryForm").addEventListener("submit", function(e) {
   const subject = document.getElementById("enq-subject").value.trim();
   const message = document.getElementById("enq-message").value.trim();
   
-  // Validation (extra checks if needed)
   if (!name || !email || !phone || !message) {
     alert("Please fill all fields correctly.");
     return;
@@ -434,9 +492,37 @@ document.getElementById("enquiryForm").addEventListener("submit", function(e) {
   enquiries.push(newEnquiry);
   localStorage.setItem("enquiries", JSON.stringify(enquiries));
   
-  alert("Thank you! Your enquiry has been submitted. We will contact you soon.");
+  alert("Thank you! Your enquiry has been submitted.");
   this.reset();
+});
+
+// LOAD DYNAMIC HOTELS FROM ADMIN (ROOMS)
+document.addEventListener("DOMContentLoaded", function() {
+  const rooms = JSON.parse(localStorage.getItem("rooms")) || [];
+  const container = document.getElementById("featuredHotelContainer");
+  
+  if (container && rooms.length > 0) {
+    rooms.forEach(room => {
+      const image = (room.images && room.images.length > 0) ? room.images[0] : "https://images.unsplash.com/photo-1566073771259-6a8506099945";
+      
+      const hotelCard = document.createElement("div");
+      hotelCard.className = "hotel-card";
+      hotelCard.innerHTML = `
+        <img src="${image}">
+        <div class="hotel-info">
+          <h3>${room.hotelName || 'Premium Hotel'}</h3>
+          <p>${room.location || 'Location not set'} - ${room.type} Room</p>
+          <p class="price">₹${room.price} / night</p>
+          <p class="rating">⭐ 4.8</p>
+          <button onclick="openModal(this)">View Details</button>
+        </div>
+      `;
+      // Append to the end of the existing list
+      container.appendChild(hotelCard);
+    });
+  }
 });
 </script>
 </body>
-</html>  
+</html>
+  

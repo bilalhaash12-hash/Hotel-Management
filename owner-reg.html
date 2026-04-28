@@ -144,27 +144,33 @@ form.addEventListener("submit", function(e) {
   const password = document.getElementById("password").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
 
-  // Password check
   if (password !== confirmPassword) {
     alert("❌ Passwords do not match");
     return;
   }
 
-  // Save user
-  const user = {
+  const hotels = JSON.parse(localStorage.getItem("hotels")) || [];
+
+  if (hotels.find(h => h.email === email || h.hotel === hotel)) {
+    alert("❌ Hotel or Email already registered!");
+    return;
+  }
+
+  const newHotel = {
+    id: Date.now(),
     hotel,
     manager,
     email,
     phone,
-    password
+    password,
+    status: "Pending"
   };
 
-  localStorage.setItem("user", JSON.stringify(user));
+  hotels.push(newHotel);
+  localStorage.setItem("hotels", JSON.stringify(hotels));
 
-  alert("✅ Registered Successfully!");
-
-  // Redirect
-  window.location.href = "adminpage.html";
+  alert("✅ Registered Successfully! Please wait for Admin Approval.");
+  window.location.href = "owner-login.html";
 });
 </script>
 

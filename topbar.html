@@ -2,519 +2,193 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Topbar User Info</title>
+<title>Hotel Admin - Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background:  #f5f7fa;
-  overflow-x: hidden;
-}
-
-.topbar {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  align-items: center;
-  padding: 20px 20px;
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(6px);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  font-family: 'Montserrat', sans-serif;
-  position: relative;
-  z-index: 1000;
-   border-bottom: 1px solid black;
-}
-.left-info {
-  display: flex;
-  flex-direction: column;  
-  align-items: flex-start;
-  gap: 0;                  
-}
-.left-info a {
-  display: flex;
-  flex-direction: column;
-  font-size: 13px;
-  color: black;
-  text-decoration: none;
-  gap: 2px;
-  margin: 2px 0;
-}
-.logo {
-  margin: 0;              
-  padding: 0;
-  font-size: 22px;
-  font-weight: bold;
-  line-height: 1.2;       
-}
-.left-info a:hover {
-  color: #1e90ff;
-}
-
-.center-info {
-  text-align: center;
-}
-
-#hotelName {
-  font-size: 30px;
-  font-weight: 700;
-  color: black;
-  font-family: 'Pacifico', cursive;
-}
-.user-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
-  transition: 0.3s ease;
-}
-.user-info:hover {
-  transform: translateY(-3px);
-}
-#managerName {
-  font-weight: 600;
-  color: #6a0dad;
-  text-decoration: underline;
-}
-#greeting {
-  font-size: 15px;
-  font-weight: 600;
-  color: #111;
-}
-
-.sidebar {
-  position: fixed;
-  top: 145px;
-  left: 0;
-  width: 250px;
-  height: calc(100vh - 163px); 
-  background: white;
-  color: black;
-  display: flex;
-  flex-direction: column;
-}
-
-.sidebar.collapsed {
-  width: 80px;
-}
-
-.menu {
-  list-style: none;
-  padding: 0px 4px;display: flex;
-  flex-direction: column;  
-  flex: 1;   
-  gap: 2px;
-}
-.menu-item {
-  padding: 15px 20px;
-  border-radius: 15px;
-  cursor: pointer;
-  display: flex;
-  text-align: center;
-  align-items: center;
-  gap: 15px;
-  cursor: pointer;
-  transition: background 0.3s ease, color 0.3s ease;
-  white-space: nowrap;
-}
-.menu-item .icon {
-  width: 24px;                
-  text-align: center;         
-  font-size: 18px;
-  flex-shrink: 0;            
-}
-
-.menu-item .text {
-  flex: 1;                    
-  text-align: left;          
-}
-.menu-item a {
-   display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  color: inherit;
-  width: 100%;
-  padding: 10px;
-}
-.menu-item:hover {
-  background: #020830;
-  color: white;
-}
-
-.menu-item.active {
-  background: #020830;
-  color: #ffffff;
-}
-
-
-.sidebar.collapsed .menu-item span,
-.sidebar.collapsed .logo {
-  display: none;
-}
-.main-content {
-  margin-left: 250px;
-  padding: 30px;
-  transition: margin-left 0.3s ease;
-}
-
-.sidebar.collapsed + .main-content {
-  margin-left: 80px;
-}
-.logout {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.logout-btn{
-  background-color: #020830;
-  color: white;
-  border: none;
-  padding: 12px 95px;
-  border-radius: 10px;
-  cursor: pointer;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  transition: all 0.3s ease;
-}
-.logout-btn:hover {
-  background: #ff9800;
-  color: black;
-  transform: translateX(-5px);
- }
- .dashboard {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-  padding: 20px;
-  margin-left: 250px; /* for sidebar */
-}
-
-/* CARD STYLE */
-.card {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transition: 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-}
-
-/* TEXT STYLES */
-.card h3 {
-  font-size: 16px;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.card .value {
-  font-size: 28px;
-  font-weight: bold;
-  color: #020830;
-}
-
-.card span {
-  font-size: 13px;
-  color: gray;
-}
-
-.card.alert {
-  border-left: 5px solid #ff9800;
-}
-
-.card.alert ul {
-  padding-left: 15px;
-  margin: 0;
-}
-
-.card.alert li {
-  font-size: 13px;
-  margin-bottom: 5px;
-}
-@media (max-width: 1024px) {
-  .sidebar { width: 80px; }
-  .menu-item .text { display: none; }
-  .main-content { margin-left: 80px; }
-  .dashboard { margin-left: 80px; }
-}
-
-/* 📱 MOBILE RESPONSIVE */
-@media (max-width: 768px) {
-
-  /* Topbar */
-  .topbar {
-    grid-template-columns: 1fr;
-    text-align: center;
-    gap: 10px;
-  }
-
-  .left-info {
-    align-items: center;
-  }
-
-  .user-info {
-    align-items: center;
-  }
-
-  #hotelName {
-    font-size: 22px;
-  }
-
-  /* Sidebar becomes bottom menu */
-  .sidebar {
-    position: fixed;
-    bottom: 0;
-    top: auto;
-    width: 100%;
-    height: 60px;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    z-index: 999;
-  }
-
-  .menu {
-    flex-direction: row;
-    width: 100%;
-    justify-content: space-around;
-  }
-
-  .menu-item {
-    flex-direction: column;
-    padding: 5px;
-    font-size: 12px;
-    border-radius: 0;
-  }
-
-  .menu-item .text {
-    font-size: 10px;
-  }
-
-  /* Hide logout button on mobile */
-  .logout {
-    display: none;
-  }
-
-  /* Main content full width */
-  .main-content {
-    margin-left: 0;
-    padding: 15px;
-  }
-
-  /* Dashboard grid for phone */
-  .dashboard {
-    margin-left: 0;
-    grid-template-columns: 1fr;
-    padding-bottom: 80px; /* space for bottom menu */
-  }
-
-  .card {
-    width: 100%;
-  }
-}
-button, .menu-item {
-  min-height: 44px; /* recommended touch size */
-}
-</style>
+<link rel="stylesheet" href="shared.css">
 </head>
 
 <body>
-  <div class="topbar">
-    <div class="left-info">
-      <h2 class="logo">Hotel Admin</h2>
-      <a id="managerInfo" href="#">Manager:</a>
-      <a id="emailInfo" href="#">Email</a>
-      <a id="phoneInfo" href="#">Phone</a>
-      <a id="whatsappLink" href="#" target="_blank">WhatsApp</a>
-    </div>
-    <div class="center-info">
-      <span id="hotelName">Hotel Name</span>
-    </div>
-    <div class="user-info">
-      <span id="greeting">Hi 👋 User</span>
-      
-    </div>
-  </div>
- 
-<div class="layout">
-<div class="sidebar">
-  <ul class="menu">
-  <li class="menu-item active">
-     <a href="topbar.html">
-      <span class="icon">🏠</span>
-      <span class="text">Dashboard</span>
-     </a>
-    </li>
-    <li class="menu-item">
-      <span class="icon">📅</span>
-      <span class="text">Bookings</span>
-    </li>
-  
-    <li class="menu-item">
-     <a href="card.html">
-    <span class="icon">🛏</span>
-    <span class="text">Rooms</span>
-    </a>
-   </li>
 
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<div class="topbar">
+  <div class="left-info">
+    <h2 class="logo">Hotel Admin</h2>
+    <a id="managerInfo" href="#">Manager:</a>
+    <a id="emailInfo" href="#">Email</a>
+    <a id="phoneInfo" href="#">Phone</a>
+    <a id="whatsappLink" href="#" target="_blank">WhatsApp</a>
+  </div>
+  <div class="center-info">
+    <div class="mobile-toggle" onclick="toggleMenu()">☰</div>
+    <span id="hotelName">Hotel Name</span>
+  </div>
+  <div class="user-info">
+    <span id="greeting">Hi 👋 User</span>
+  </div>
+</div>
+
+<div class="sidebar" id="sidebar">
+  <ul class="menu">
     <li class="menu-item">
-      <a href="guest.html">
-      <span class="icon">👥</span>
-      <span class="text">Guests</span>
-      </a>
+      <a href="topbar.html"><span>🏠</span> <span class="text">Dashboard</span></a>
     </li>
     <li class="menu-item">
-      <a href="payment.html">
-      <span class="icon">💳</span>
-      <span class="text">Payments</span>
-      </a>
+      <a href="bookings.html"><span>📅</span> <span class="text">Bookings</span></a>
     </li>
     <li class="menu-item">
-      <span class="icon">⭐</span>
-      <span class="text">Reviews</span>
+      <a href="card.html"><span>🛏</span> <span class="text">Rooms</span></a>
     </li>
     <li class="menu-item">
-      <a href="enquiry.html">
-        <span class="icon">📧</span>
-        <span class="text">Enquiries</span>
-      </a>
+      <a href="guest.html"><span>👥</span> <span class="text">Guests</span></a>
     </li>
     <li class="menu-item">
-      <a href="enquiry.html">
-        <span class="icon">📧</span>
-        <span class="text">Enquiries</span>
-      </a>
+      <a href="payment.html"><span>💳</span> <span class="text">Payments</span></a>
     </li>
     <li class="menu-item">
-      <span class="icon">⚙</span>
-      <span class="text">Settings</span>
+      <a href="#"><span>⭐</span> <span class="text">Reviews</span></a>
+    </li>
+    <li class="menu-item">
+      <a href="enquiry.html"><span>📧</span> <span class="text">Enquiries</span></a>
+    </li>
+    <li class="menu-item">
+      <a href="#"><span>⚙</span> <span class="text">Settings</span></a>
     </li>
   </ul>
-<div class="logout">   
-   <button class="logout-btn" onclick="logout()">Logout</button>
-</div> 
-</div>
+  <div class="logout-container">
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
 </div>
 
-  <div class="main-content" id="main-content">
-    <h1>Welcome to the Hotel Admin Dashboard</h1>
-    <p>Select a menu item to get started.</p>
-  </div>
+<div class="main-content">
+  <h1>Welcome to the Hotel Admin Dashboard</h1>
+  <p>Real-time overview of your hotel performance.</p>
+
   <div class="dashboard">
+    <div class="card" onclick="window.location.href='bookings.html'" style="cursor:pointer;">
+      <h3>Total Bookings</h3>
+      <p class="value" id="totalBookings">0</p>
+      <span>Confirmed Bookings</span>
+    </div>
 
-  <div class="card">
-    <h3>Total Bookings</h3>
-    <p class="value">128</p>
-    <span>Today: 12 | This Month: 116</span>
+    <div class="card">
+      <h3>Rooms Status</h3>
+      <p class="value" id="roomStatus">0 / 0</p>
+      <span>Occupied / Available</span>
+    </div>
+
+    <div class="card">
+      <h3>Total Revenue</h3>
+      <p class="value" id="totalRevenue">₹0</p>
+      <span>Total Paid Payments</span>
+    </div>
+
+    <div class="card">
+      <h3>Check-ins / Check-outs</h3>
+      <p class="value">0 / 0</p>
+      <span>Pending Today</span>
+    </div>
+
+    <div class="card alert">
+      <h3>Quick Alerts</h3>
+      <ul id="alertList">
+        <li>All systems operational</li>
+      </ul>
+    </div>
+
+    <div class="card" onclick="window.location.href='enquiry.html'" style="cursor:pointer; border-left: 5px solid #3b82f6;">
+      <h3>New Enquiries</h3>
+      <p class="value" id="enquiryCount">0</p>
+      <span>Pending Enquiries</span>
+    </div>
   </div>
 
-  <div class="card">
-    <h3>Rooms Status</h3>
-    <p class="value">45 / 60</p>
-    <span>Occupied / Available</span>
+  <div class="table-container" style="margin-top: 30px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+    <h3 style="margin-bottom: 15px;">Recent Bookings</h3>
+    <table style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr style="text-align: left; border-bottom: 2px solid #f5f7fa;">
+          <th style="padding: 10px;">Guest</th>
+          <th style="padding: 10px;">Hotel</th>
+          <th style="padding: 10px;">Date</th>
+          <th style="padding: 10px;">Status</th>
+        </tr>
+      </thead>
+      <tbody id="recentBookingsTable">
+        <!-- JS will populate this -->
+      </tbody>
+    </table>
   </div>
-
-  <div class="card">
-    <h3>Total Revenue</h3>
-    <p class="value">₹12,450</p>
-    <span>This Month Earnings</span>
-  </div>
-
-  <div class="card">
-    <h3>Check-ins / Check-outs</h3>
-    <p class="value">8 / 5</p>
-    <span>Pending Today</span>
-  </div>
-
-  <div class="card alert">
-    <h3>Quick Alerts</h3>
-    <ul>
-      <li>Booking cancelled #1023</li>
-      <li>Room 204 maintenance needed</li>
-      <li>Guest complaint received</li>
-    </ul>
-  </div>
-
-  <div class="card" onclick="window.location.href='enquiry.html'" style="cursor:pointer; border-left: 5px solid #3b82f6;">
-    <h3>New Enquiries</h3>
-    <p class="value" id="enquiryCount">0</p>
-    <span>Pending Enquiries</span>
-  </div>
-
 </div>
 
+<script src="admin-scripts.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  const data = JSON.parse(localStorage.getItem("user"));
+  // Real Data Integration
+  const userData = JSON.parse(localStorage.getItem("user")) || {};
+  const currentHotel = userData.hotel || "";
 
-  // ✅ Get current page name
-  const currentPage = window.location.pathname.split("/").pop();
-
-  // ❌ Redirect ONLY if not logged in AND not on allowed pages
-  const publicPages = ["hotelreg.html"]; // pages allowed without login
-
-  if (!data && !publicPages.includes(currentPage)) {
-    window.location.href = "hotelreg.html";
-    return;
-  }
-
-  // ✅ If elements exist, then update (prevents errors)
-  if (data) {
-    if (document.getElementById("hotelName")) {
-      document.getElementById("hotelName").textContent = data.hotel || "Hotel";
-    }
-
-    if (document.getElementById("managerInfo")) {
-      document.getElementById("managerInfo").textContent = `Manager: ${data.manager}`;
-    }
-
-    if (document.getElementById("emailInfo")) {
-      document.getElementById("emailInfo").textContent = `Email: ${data.email}`;
-    }
-
-    if (document.getElementById("phoneInfo")) {
-      document.getElementById("phoneInfo").textContent = `Phone: ${data.phone}`;
-    }
-
-    if (document.getElementById("greeting")) {
-      document.getElementById("greeting").textContent = `Hi 👋 ${data.manager}`;
-    }
-
-    if (data.phone && document.getElementById("whatsappLink")) {
-      document.getElementById("whatsappLink").href = `https://wa.me/91${data.phone}`;
-    }
-  }
-
-  // ✅ New Enquiry Count logic
   const enquiries = JSON.parse(localStorage.getItem("enquiries")) || [];
+  const rooms = JSON.parse(localStorage.getItem("rooms")) || [];
+  const payments = JSON.parse(localStorage.getItem("payments")) || [];
+  let allBookings = JSON.parse(localStorage.getItem("bookings")) || [];
+
+  // Filter bookings for THIS hotel ONLY
+  const hotelBookings = allBookings.filter(b => b.hotel === currentHotel || !b.hotel);
+
+  // 1. Total Bookings
+  document.getElementById("totalBookings").textContent = hotelBookings.length;
+
+  // 2. Room Status
+  const totalRooms = rooms.length;
+  document.getElementById("roomStatus").textContent = `0 / ${totalRooms}`;
+
+  // 3. Total Revenue
+  const totalRev = payments.reduce((sum, p) => {
+    if (p.status === "Paid" || p.status === "Cleared") {
+      return sum + (parseInt(p.amount) || 0);
+    }
+    return sum;
+  }, 0);
+  document.getElementById("totalRevenue").textContent = `₹${totalRev.toLocaleString()}`;
+
+  // 4. Pending Enquiries
   const pendingCount = enquiries.filter(e => e.status === "pending").length;
-  if (document.getElementById("enquiryCount")) {
-    document.getElementById("enquiryCount").textContent = pendingCount;
+  document.getElementById("enquiryCount").textContent = pendingCount;
+
+  // 5. Recent Bookings Table
+  const recentTable = document.getElementById("recentBookingsTable");
+  recentTable.innerHTML = "";
+  if (hotelBookings.length === 0) {
+    recentTable.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px;">No bookings yet.</td></tr>`;
+  } else {
+    hotelBookings.slice(-5).reverse().forEach(b => {
+      recentTable.innerHTML += `
+        <tr style="border-bottom: 1px solid #f5f7fa;">
+          <td style="padding: 10px;">${b.name}</td>
+          <td style="padding: 10px;">${b.hotel}</td>
+          <td style="padding: 10px;">${b.date}</td>
+          <td style="padding: 10px;"><span style="color: #22c55e; font-weight: bold;">${b.status}</span></td>
+        </tr>
+      `;
+    });
+  }
+
+  // 6. Quick Alerts
+  const alertList = document.getElementById("alertList");
+  alertList.innerHTML = "";
+  if (pendingCount > 0) {
+    alertList.innerHTML += `<li>${pendingCount} new enquiries pending</li>`;
+  }
+  if (totalRooms === 0) {
+    alertList.innerHTML += `<li>No rooms added yet</li>`;
+  }
+  if (alertList.innerHTML === "") {
+    alertList.innerHTML = "<li>All systems operational</li>";
   }
 });
-document.querySelectorAll(".menu-item a").forEach(link => {
-  if (link.href.includes(window.location.pathname.split("/").pop())) {
-    link.parentElement.classList.add("active");
-  }
-});
-
-function toggleMenu() {
-  document.getElementById("sidebar").classList.toggle("active");
-  document.getElementById("overlay").classList.toggle("active");
-}
-
-// LOGOUT
-function logout() {
-  localStorage.removeItem("user");
-  window.location.href = "hotelreg.html";
-}
 </script>
- 
+
 </body>
+</html>

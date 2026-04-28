@@ -132,24 +132,26 @@ const loginForm = document.getElementById("loginForm");
 loginForm.addEventListener("submit", function(e) {
   e.preventDefault();
 
-  const email = document.getElementById("loginEmail").value;
-  const password = document.getElementById("loginPassword").value;
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
 
-  // ✅ Get user from register page
-  const user = JSON.parse(localStorage.getItem("user"));
+  // ✅ Get all hotels list
+  const hotels = JSON.parse(localStorage.getItem("hotels")) || [];
+  
+  // Find matching hotel owner
+  const foundHotel = hotels.find(h => h.email === email && h.password === password);
 
-  if (!user) {
-    alert("❌ No user found. Please register first.");
-    return;
-  }
-
-  if (email === user.email && password === user.password) {
-
-    localStorage.setItem("isLoggedIn", "true");
-
-    alert("✅ Login successful!");
-    window.location.href = "adminpage.html";
-
+  if (foundHotel) {
+    if (foundHotel.status === "Approved") {
+      localStorage.setItem("user", JSON.stringify(foundHotel));
+      localStorage.setItem("isLoggedIn", "true");
+      alert("✅ Login successful!");
+      window.location.href = "topbar.html"; // Redirect to owner dashboard
+    } else if (foundHotel.status === "Rejected") {
+      alert("❌ Your registration has been REJECTED by the Admin.");
+    } else {
+      alert("⏳ Your account is PENDING approval. Please wait for the Admin to approve your hotel.");
+    }
   } else {
     alert("❌ Invalid email or password");
   }
