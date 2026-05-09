@@ -134,7 +134,7 @@ body {
 <script>
 const form = document.getElementById("registerForm");
 
-form.addEventListener("submit", function(e) {
+form.addEventListener("submit", async function(e) {
   e.preventDefault();
 
   const hotel = document.getElementById("hotel").value;
@@ -149,28 +149,27 @@ form.addEventListener("submit", function(e) {
     return;
   }
 
-  const hotels = JSON.parse(localStorage.getItem("hotels")) || [];
+  const newHotel = { hotel, manager, email, phone, password };
 
-  if (hotels.find(h => h.email === email || h.hotel === hotel)) {
-    alert("❌ Hotel or Email already registered!");
-    return;
+  try {
+    const response = await fetch('/api/hotels/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newHotel)
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert("✅ " + data.message);
+      window.location.href = "owner-login.html";
+    } else {
+      alert("❌ " + data.message);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert("❌ Something went wrong while registering!");
   }
-
-  const newHotel = {
-    id: Date.now(),
-    hotel,
-    manager,
-    email,
-    phone,
-    password,
-    status: "Pending"
-  };
-
-  hotels.push(newHotel);
-  localStorage.setItem("hotels", JSON.stringify(hotels));
-
-  alert("✅ Registered Successfully! Please wait for Admin Approval.");
-  window.location.href = "owner-login.html";
 });
 </script>
 

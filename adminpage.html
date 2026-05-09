@@ -525,211 +525,239 @@
     }
 
     // FIX: Enquiry Variable Bug
-    function loadEnquiries() {
-      const enquiries = JSON.parse(localStorage.getItem("enquiries")) || [];
-      const table = document.getElementById("enquiryList");
-      const recentTable = document.getElementById("recentEnquiryList");
-      const countDisplay = document.getElementById("totalEnquiries");
+    async function loadEnquiries() {
+      try {
+        const response = await fetch('/api/enquiries');
+        const enquiries = await response.json();
+        const table = document.getElementById("enquiryList");
+        const recentTable = document.getElementById("recentEnquiryList");
+        const countDisplay = document.getElementById("totalEnquiries");
 
-      if (countDisplay) countDisplay.innerText = enquiries.filter(e => e.status === "pending").length || enquiries.length;
+        if (countDisplay) countDisplay.innerText = enquiries.filter(e => e.status === "pending").length || enquiries.length;
 
-      table.innerHTML = "";
-      if (recentTable) recentTable.innerHTML = "";
+        table.innerHTML = "";
+        if (recentTable) recentTable.innerHTML = "";
 
-      if (enquiries.length === 0) {
-        const emptyRow = "<tr><td colspan='5' style='text-align:center; padding: 40px; color: #888;'>No enquiries found.</td></tr>";
-        table.innerHTML = emptyRow;
-        if (recentTable) recentTable.innerHTML = emptyRow;
-        return;
-      }
+        if (enquiries.length === 0) {
+          const emptyRow = "<tr><td colspan='5' style='text-align:center; padding: 40px; color: #888;'>No enquiries found.</td></tr>";
+          table.innerHTML = emptyRow;
+          if (recentTable) recentTable.innerHTML = emptyRow;
+          return;
+        }
 
-      // Populate main list
-      enquiries.forEach((e, i) => {
-        const row = `
-      <tr>
-        <td><strong>${e.name}</strong></td>
-        <td>${e.email || "N/A"}</td>
-        <td>${e.phone || "N/A"}</td>
-        <td>${e.message || e.msg || "No message content"}</td>
-        <td style="text-align:right"><button class="btn-delete" onclick="deleteEnquiry(${i})">Delete</button></td>
-      </tr>`;
-        table.innerHTML += row;
-      });
-
-      // Populate recent list (last 3)
-      if (recentTable) {
-        enquiries.slice(-3).reverse().forEach(e => {
-          recentTable.innerHTML += `
+        // Populate main list
+        enquiries.forEach((e) => {
+          const row = `
         <tr>
           <td><strong>${e.name}</strong></td>
           <td>${e.email || "N/A"}</td>
           <td>${e.phone || "N/A"}</td>
           <td>${e.message || e.msg || "No message content"}</td>
+          <td style="text-align:right"><button class="btn-delete" onclick="deleteEnquiry('${e._id}')">Delete</button></td>
         </tr>`;
+          table.innerHTML += row;
         });
+
+        // Populate recent list (last 3)
+        if (recentTable) {
+          enquiries.slice(-3).reverse().forEach(e => {
+            recentTable.innerHTML += `
+          <tr>
+            <td><strong>${e.name}</strong></td>
+            <td>${e.email || "N/A"}</td>
+            <td>${e.phone || "N/A"}</td>
+            <td>${e.message || e.msg || "No message content"}</td>
+          </tr>`;
+          });
+        }
+      } catch (error) {
+        console.error("Error loading enquiries:", error);
       }
     }
 
-    function deleteEnquiry(i) {
+    async function deleteEnquiry(id) {
       if (confirm("Delete this enquiry?")) {
-        let data = JSON.parse(localStorage.getItem("enquiries"));
-        data.splice(i, 1);
-        localStorage.setItem("enquiries", JSON.stringify(data));
-        loadEnquiries();
+        try {
+          await fetch(`/api/enquiries/${id}`, { method: 'DELETE' });
+          loadEnquiries();
+        } catch (error) {
+          console.error("Error deleting enquiry:", error);
+        }
       }
     }
 
     // BOOKINGS
-    function loadBookings() {
-      let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
-      let dashboardTable = document.getElementById("bookingListDashboard");
-      let fullTable = document.getElementById("fullBookingList");
+    async function loadBookings() {
+      try {
+        const response = await fetch('/api/bookings');
+        let bookings = await response.json();
+        
+        let dashboardTable = document.getElementById("bookingListDashboard");
+        let fullTable = document.getElementById("fullBookingList");
 
-      if (dashboardTable) dashboardTable.innerHTML = "";
-      if (fullTable) fullTable.innerHTML = "";
+        if (dashboardTable) dashboardTable.innerHTML = "";
+        if (fullTable) fullTable.innerHTML = "";
 
-      let totalRevenue = 0;
+        let totalRevenue = 0;
 
-      bookings.sort((a, b) => b.id - a.id);
+        bookings.forEach((b, i) => {
+          // Calculate revenue (for now just using price if available, else 0)
+          totalRevenue += parseFloat(b.price) || 0;
 
-      bookings.forEach((b, i) => {
-        // Calculate revenue (for now just using price if available, else 0)
-        totalRevenue += parseFloat(b.price) || 0;
+          const rowHTML = `
+        <tr>
+          <td><strong>${b.name}</strong></td>
+          <td>${b.hotel}</td>
+          <td>${b.date} ${b.time || ""}</td>
+          <td>${b.guests || 0} (${b.adults || 0} Ad)</td>
+          <td><span style="color: ${b.status === 'Confirmed' ? '#10b981' : '#f59e0b'}; font-weight: 600;">${b.status}</span></td>
+          <td><button class="btn-delete" onclick="deleteBooking('${b._id}')">Delete</button></td>
+        </tr>`;
 
-        const rowHTML = `
-      <tr>
-        <td><strong>${b.name}</strong></td>
-        <td>${b.hotel}</td>
-        <td>${b.date} ${b.time || ""}</td>
-        <td>${b.guests || 0} (${b.adults || 0} Ad)</td>
-        <td><span style="color: ${b.status === 'Confirmed' ? '#10b981' : '#f59e0b'}; font-weight: 600;">${b.status}</span></td>
-        <td><button class="btn-delete" onclick="deleteBooking(${b.id})">Delete</button></td>
-      </tr>`;
+          if (fullTable) fullTable.innerHTML += rowHTML;
 
-        if (fullTable) fullTable.innerHTML += rowHTML;
+          if (dashboardTable && i < 5) {
+            dashboardTable.innerHTML += rowHTML;
+          }
+        });
 
-        if (dashboardTable && i < 5) {
-          dashboardTable.innerHTML += rowHTML;
+        if (document.getElementById("totalBookings")) {
+          document.getElementById("totalBookings").innerText = bookings.length;
         }
-      });
-
-      if (document.getElementById("totalBookings")) {
-        document.getElementById("totalBookings").innerText = bookings.length;
-      }
-      if (document.getElementById("totalRevenue")) {
-        document.getElementById("totalRevenue").innerText = "₹" + totalRevenue;
+        if (document.getElementById("totalRevenue")) {
+          document.getElementById("totalRevenue").innerText = "₹" + totalRevenue;
+        }
+      } catch (error) {
+        console.error("Error loading bookings:", error);
       }
     }
 
-    function deleteBooking(id) {
+    async function deleteBooking(id) {
       if (confirm("Delete this booking?")) {
-        let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
-        bookings = bookings.filter(b => b.id !== id);
-        localStorage.setItem("bookings", JSON.stringify(bookings));
-        loadBookings();
+        try {
+          await fetch(`/api/bookings/${id}`, { method: 'DELETE' });
+          loadBookings();
+        } catch (error) {
+          console.error("Error deleting booking:", error);
+        }
       }
     }
 
     // HOTELS
-    function loadHotels() {
-      let data = JSON.parse(localStorage.getItem("hotels")) || [];
-      let table = document.getElementById("hotelList");
-      table.innerHTML = "";
-      data.forEach(h => {
-        let actions = "";
-        if (h.status === "Pending") {
-          actions = `
-            <button class="btn-delete" style="background: #dcfce7; color: #16a34a; margin-right: 5px;" onclick="approveHotel(${h.id})">Approve</button>
-            <button class="btn-delete" onclick="rejectHotel(${h.id})">Reject</button>
-          `;
-        } else {
-          actions = `<button class="btn-delete" onclick="deleteHotel(${h.id})">Remove</button>`;
-        }
+    async function loadHotels() {
+      try {
+        const response = await fetch('/api/hotels');
+        let data = await response.json();
+        let table = document.getElementById("hotelList");
+        table.innerHTML = "";
+        data.forEach(h => {
+          let actions = "";
+          if (h.status === "Pending") {
+            actions = `
+              <button class="btn-delete" style="background: #dcfce7; color: #16a34a; margin-right: 5px;" onclick="updateHotelStatus('${h._id}', 'Approved')">Approve</button>
+              <button class="btn-delete" onclick="updateHotelStatus('${h._id}', 'Rejected')">Reject</button>
+            `;
+          } else {
+            actions = `<button class="btn-delete" onclick="deleteHotel('${h._id}')">Remove</button>`;
+          }
 
-        table.innerHTML += `
-      <tr>
-        <td><strong>${h.hotel}</strong></td>
-        <td>${h.manager}</td>
-        <td>${h.email}</td>
-        <td>${h.phone}</td>
-        <td>
-          <span style="color: ${h.status === 'Approved' ? '#10b981' : h.status === 'Rejected' ? '#ef4444' : '#f59e0b'}; font-weight: 600;">
-            ${h.status}
-          </span>
-        </td>
-        <td style="text-align:right">${actions}</td>
-      </tr>`;
-      });
+          table.innerHTML += `
+        <tr>
+          <td><strong>${h.hotel}</strong></td>
+          <td>${h.manager}</td>
+          <td>${h.email}</td>
+          <td>${h.phone}</td>
+          <td>
+            <span style="color: ${h.status === 'Approved' ? '#10b981' : h.status === 'Rejected' ? '#ef4444' : '#f59e0b'}; font-weight: 600;">
+              ${h.status}
+            </span>
+          </td>
+          <td style="text-align:right">${actions}</td>
+        </tr>`;
+        });
+      } catch (error) {
+        console.error("Error loading hotels:", error);
+      }
     }
 
-    function approveHotel(id) {
-      let hotels = JSON.parse(localStorage.getItem("hotels")) || [];
-      let hotel = hotels.find(h => h.id === id);
-      if (hotel) {
-        hotel.status = "Approved";
-        localStorage.setItem("hotels", JSON.stringify(hotels));
+    async function updateHotelStatus(id, status) {
+      if (status === 'Rejected' && !confirm("Are you sure you want to REJECT this hotel?")) return;
+      try {
+        await fetch(`/api/hotels/${id}/status`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status })
+        });
+        if (status === 'Approved') alert("Hotel Approved!");
         loadHotels();
-        alert("Hotel Approved!");
+      } catch (error) {
+        console.error("Error updating hotel status:", error);
       }
     }
 
-    function rejectHotel(id) {
-      if (confirm("Are you sure you want to REJECT this hotel?")) {
-        let hotels = JSON.parse(localStorage.getItem("hotels")) || [];
-        let hotel = hotels.find(h => h.id === id);
-        if (hotel) {
-          hotel.status = "Rejected";
-          localStorage.setItem("hotels", JSON.stringify(hotels));
-          loadHotels();
-        }
-      }
-    }
-
-    function deleteHotel(id) {
+    async function deleteHotel(id) {
       if (confirm("Delete this hotel record?")) {
-        let hotels = JSON.parse(localStorage.getItem("hotels")) || [];
-        hotels = hotels.filter(h => h.id !== id);
-        localStorage.setItem("hotels", JSON.stringify(hotels));
-        loadHotels();
+        try {
+          await fetch(`/api/hotels/${id}`, { method: 'DELETE' });
+          loadHotels();
+        } catch (error) {
+          console.error("Error deleting hotel:", error);
+        }
       }
     }
 
     // REVIEWS
-    function loadReviews() {
-      let data = JSON.parse(localStorage.getItem("reviews")) || [];
-      let table = document.getElementById("reviewList");
-      table.innerHTML = "";
-      data.forEach(r => {
-        table.innerHTML += `
-      <tr>
-        <td><strong>${r.user}</strong></td>
-        <td>"${r.review}"</td>
-        <td style="color: #ffb703; font-weight: bold;">${r.rating} ⭐</td>
-      </tr>`;
-      });
+    async function loadReviews() {
+      try {
+        const response = await fetch('/api/reviews');
+        let data = await response.json();
+        let table = document.getElementById("reviewList");
+        table.innerHTML = "";
+        data.forEach(r => {
+          table.innerHTML += `
+        <tr>
+          <td><strong>${r.user}</strong></td>
+          <td>"${r.review}"</td>
+          <td style="color: #ffb703; font-weight: bold;">${r.rating} ⭐</td>
+        </tr>`;
+        });
+      } catch (error) {
+        console.error("Error loading reviews:", error);
+      }
     }
 
     // MAINTENANCE
-    function loadMaintenance() {
-      let data = JSON.parse(localStorage.getItem("maintenance")) || [];
-      let table = document.getElementById("maintenanceList");
-      table.innerHTML = "";
-      data.forEach((m, i) => {
-        table.innerHTML += `
-      <tr>
-        <td>${m.hotel}</td>
-        <td>${m.issue}</td>
-        <td><span style="font-weight: 600; color: ${m.status === 'Fixed' ? '#10b981' : '#f59e0b'}">${m.status}</span></td>
-        <td><button class="btn-delete" style="background: #dcfce7; color: #16a34a;" onclick="fix(${i})">Mark Fixed</button></td>
-      </tr>`;
-      });
+    async function loadMaintenance() {
+      try {
+        const response = await fetch('/api/maintenance');
+        let data = await response.json();
+        let table = document.getElementById("maintenanceList");
+        table.innerHTML = "";
+        data.forEach((m) => {
+          table.innerHTML += `
+        <tr>
+          <td>${m.hotel}</td>
+          <td>${m.issue}</td>
+          <td><span style="font-weight: 600; color: ${m.status === 'Fixed' ? '#10b981' : '#f59e0b'}">${m.status}</span></td>
+          <td><button class="btn-delete" style="background: #dcfce7; color: #16a34a;" onclick="fix('${m._id}')">Mark Fixed</button></td>
+        </tr>`;
+        });
+      } catch (error) {
+        console.error("Error loading maintenance logs:", error);
+      }
     }
 
-    function fix(i) {
-      let data = JSON.parse(localStorage.getItem("maintenance"));
-      data[i].status = "Fixed";
-      localStorage.setItem("maintenance", JSON.stringify(data));
-      loadMaintenance();
+    async function fix(id) {
+      try {
+        await fetch(`/api/maintenance/${id}/status`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'Fixed' })
+        });
+        loadMaintenance();
+      } catch (error) {
+        console.error("Error fixing maintenance log:", error);
+      }
     }
 
     // LOGOUT

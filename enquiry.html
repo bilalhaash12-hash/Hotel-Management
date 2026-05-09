@@ -115,66 +115,78 @@ document.addEventListener("DOMContentLoaded", function () {
   loadEnquiries();
 });
 
-function loadEnquiries() {
-  const enquiries = JSON.parse(localStorage.getItem("enquiries")) || [];
-  const list = document.getElementById("enquiryList");
-  list.innerHTML = "";
+async function loadEnquiries() {
+  try {
+    const response = await fetch('/api/enquiries');
+    const enquiries = await response.json();
+    const list = document.getElementById("enquiryList");
+    list.innerHTML = "";
 
-  if (enquiries.length === 0) {
-    list.innerHTML = `<div class="enquiry-card" style="grid-template-columns: 1fr; text-align: center;"><h3>No enquiries found.</h3></div>`;
-    return;
+    if (enquiries.length === 0) {
+      list.innerHTML = `<div class="enquiry-card" style="grid-template-columns: 1fr; text-align: center;"><h3>No enquiries found.</h3></div>`;
+      return;
+    }
+
+    enquiries.sort((a, b) => {
+      if (a.status === "pending" && b.status !== "pending") return -1;
+      if (a.status !== "pending" && b.status === "pending") return 1;
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+
+    enquiries.forEach(enq => {
+      const isUnread = enq.status === "pending";
+      const card = document.createElement("div");
+      card.className = `enquiry-card ${isUnread ? 'unread' : ''}`;
+      card.id = `enq-${enq._id}`;
+      
+      const dateStr = new Date(enq.createdAt).toLocaleString();
+
+      card.innerHTML = `
+        <div class="customer-info">
+          <h4>${enq.name}</h4>
+          <p>📧 ${enq.email}</p>
+          <p>📞 ${enq.phone}</p>
+          <p>📅 ${dateStr}</p>
+        </div>
+        <div class="enquiry-message">
+          <span class="subject">${enq.subject || "No Subject"}</span>
+          <blockquote>"${enq.message}"</blockquote>
+        </div>
+        <div class="enquiry-actions">
+          <span class="status-badge status-${enq.status}">${enq.status}</span>
+          ${enq.status === 'pending' ? `<button class="action-btn btn-read" onclick="updateStatus('${enq._id}', 'read')">Mark Read</button>` : ''}
+          ${enq.status === 'read' ? `<button class="action-btn btn-resolve" onclick="updateStatus('${enq._id}', 'resolved')">Resolve</button>` : ''}
+          <button class="action-btn btn-delete" onclick="deleteEnquiry('${enq._id}')">Delete</button>
+        </div>
+      `;
+      list.appendChild(card);
+    });
+  } catch (error) {
+    console.error("Error loading enquiries:", error);
   }
-
-  enquiries.sort((a, b) => {
-    if (a.status === "pending" && b.status !== "pending") return -1;
-    if (a.status !== "pending" && b.status === "pending") return 1;
-    return b.id - a.id;
-  });
-
-  enquiries.forEach(enq => {
-    const isUnread = enq.status === "pending";
-    const card = document.createElement("div");
-    card.className = `enquiry-card ${isUnread ? 'unread' : ''}`;
-    card.id = `enq-${enq.id}`;
-    
-    card.innerHTML = `
-      <div class="customer-info">
-        <h4>${enq.name}</h4>
-        <p>📧 ${enq.email}</p>
-        <p>📞 ${enq.phone}</p>
-        <p>📅 ${enq.created_at}</p>
-      </div>
-      <div class="enquiry-message">
-        <span class="subject">${enq.subject || "No Subject"}</span>
-        <blockquote>"${enq.message}"</blockquote>
-      </div>
-      <div class="enquiry-actions">
-        <span class="status-badge status-${enq.status}">${enq.status}</span>
-        ${enq.status === 'pending' ? `<button class="action-btn btn-read" onclick="updateStatus(${enq.id}, 'read')">Mark Read</button>` : ''}
-        ${enq.status === 'read' ? `<button class="action-btn btn-resolve" onclick="updateStatus(${enq.id}, 'resolved')">Resolve</button>` : ''}
-        <button class="action-btn btn-delete" onclick="deleteEnquiry(${enq.id})">Delete</button>
-      </div>
-    `;
-    list.appendChild(card);
-  });
 }
 
-function updateStatus(id, newStatus) {
-  let enquiries = JSON.parse(localStorage.getItem("enquiries")) || [];
-  const index = enquiries.findIndex(e => e.id === id);
-  if (index !== -1) {
-    enquiries[index].status = newStatus;
-    localStorage.setItem("enquiries", JSON.stringify(enquiries));
+async function updateStatus(id, newStatus) {
+  try {
+    await fetch(`/api/enquiries/${id}/status`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: newStatus })
+    });
     loadEnquiries();
+  } catch (error) {
+    console.error("Error updating status:", error);
   }
 }
 
-function deleteEnquiry(id) {
+async function deleteEnquiry(id) {
   if (confirm("Are you sure you want to delete this enquiry?")) {
-    let enquiries = JSON.parse(localStorage.getItem("enquiries")) || [];
-    enquiries = enquiries.filter(e => e.id !== id);
-    localStorage.setItem("enquiries", JSON.stringify(enquiries));
-    loadEnquiries();
+    try {
+      await fetch(`/api/enquiries/${id}`, { method: 'DELETE' });
+      loadEnquiries();
+    } catch (error) {
+      console.error("Error deleting enquiry:", error);
+    }
   }
 }
 

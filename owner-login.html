@@ -129,31 +129,40 @@ body {
 <script>
 const loginForm = document.getElementById("loginForm");
 
-loginForm.addEventListener("submit", function(e) {
+loginForm.addEventListener("submit", async function(e) {
   e.preventDefault();
 
   const email = document.getElementById("loginEmail").value.trim();
   const password = document.getElementById("loginPassword").value.trim();
 
-  // ✅ Get all hotels list
-  const hotels = JSON.parse(localStorage.getItem("hotels")) || [];
-  
-  // Find matching hotel owner
-  const foundHotel = hotels.find(h => h.email === email && h.password === password);
+  try {
+    const response = await fetch('/api/hotels/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
 
-  if (foundHotel) {
-    if (foundHotel.status === "Approved") {
-      localStorage.setItem("user", JSON.stringify(foundHotel));
-      localStorage.setItem("isLoggedIn", "true");
-      alert("✅ Login successful!");
-      window.location.href = "topbar.html"; // Redirect to owner dashboard
-    } else if (foundHotel.status === "Rejected") {
-      alert("❌ Your registration has been REJECTED by the Admin.");
+    const data = await response.json();
+
+    if (response.ok) {
+      const foundHotel = data.hotel;
+      
+      if (foundHotel.status === "Approved") {
+        localStorage.setItem("user", JSON.stringify(foundHotel));
+        localStorage.setItem("isLoggedIn", "true");
+        alert("✅ Login successful!");
+        window.location.href = "topbar.html"; // Redirect to owner dashboard
+      } else if (foundHotel.status === "Rejected") {
+        alert("❌ Your registration has been REJECTED by the Admin.");
+      } else {
+        alert("⏳ Your account is PENDING approval. Please wait for the Admin to approve your hotel.");
+      }
     } else {
-      alert("⏳ Your account is PENDING approval. Please wait for the Admin to approve your hotel.");
+      alert("❌ " + data.message);
     }
-  } else {
-    alert("❌ Invalid email or password");
+  } catch (error) {
+    console.error("Login error:", error);
+    alert("❌ Something went wrong during login.");
   }
 });
 </script>

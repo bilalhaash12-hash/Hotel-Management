@@ -420,7 +420,7 @@ function closeModal() {
   document.getElementById("modal").style.display = "none";
 }
 
-function bookNow() {
+async function bookNow() {
   let name = document.getElementById("name").value;
   let guests = document.getElementById("guests").value;
   let date = document.getElementById("date").value;
@@ -435,9 +435,7 @@ function bookNow() {
     return;
   }
 
-  const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
   const newBooking = {
-    id: Date.now(),
     name,
     guests,
     date,
@@ -445,25 +443,35 @@ function bookNow() {
     days,
     adults,
     hotel: hotelName,
-    status: "Confirmed",
-    created_at: new Date().toLocaleString()
+    status: "Confirmed"
   };
-  
-  bookings.push(newBooking);
-  localStorage.setItem("bookings", JSON.stringify(bookings));
 
-  alert(
-    `Booking Confirmed!\nHotel: ${hotelName}\nName: ${name}\nDays: ${days}\nDate: ${date}\nTime: ${timeVal} ${period}`
-  );
+  try {
+    const response = await fetch('/api/bookings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newBooking)
+    });
 
-  closeModal();
+    if (response.ok) {
+      alert(
+        `Booking Confirmed!\nHotel: ${hotelName}\nName: ${name}\nDays: ${days}\nDate: ${date}\nTime: ${timeVal} ${period}`
+      );
+      closeModal();
+    } else {
+      alert("Error confirming booking.");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Something went wrong.");
+  }
 }
 function goToChoice() {
   window.location.href = "choice.html";
 }
 
 // ENQUIRY FORM LOGIC
-document.getElementById("enquiryForm").addEventListener("submit", function(e) {
+document.getElementById("enquiryForm").addEventListener("submit", async function(e) {
   e.preventDefault();
   
   const name = document.getElementById("enq-name").value.trim();
@@ -477,49 +485,56 @@ document.getElementById("enquiryForm").addEventListener("submit", function(e) {
     return;
   }
   
-  const enquiries = JSON.parse(localStorage.getItem("enquiries")) || [];
-  const newEnquiry = {
-    id: Date.now(),
-    name,
-    email,
-    phone,
-    subject,
-    message,
-    status: "pending",
-    created_at: new Date().toLocaleString()
-  };
+  const newEnquiry = { name, email, phone, subject, message };
   
-  enquiries.push(newEnquiry);
-  localStorage.setItem("enquiries", JSON.stringify(enquiries));
-  
-  alert("Thank you! Your enquiry has been submitted.");
-  this.reset();
+  try {
+    const response = await fetch('/api/enquiries', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newEnquiry)
+    });
+
+    if (response.ok) {
+      alert("Thank you! Your enquiry has been submitted.");
+      this.reset();
+    } else {
+      alert("Failed to submit enquiry.");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Something went wrong.");
+  }
 });
 
 // LOAD DYNAMIC HOTELS FROM ADMIN (ROOMS)
-document.addEventListener("DOMContentLoaded", function() {
-  const rooms = JSON.parse(localStorage.getItem("rooms")) || [];
+document.addEventListener("DOMContentLoaded", async function() {
   const container = document.getElementById("featuredHotelContainer");
   
-  if (container && rooms.length > 0) {
-    rooms.forEach(room => {
-      const image = (room.images && room.images.length > 0) ? room.images[0] : "https://images.unsplash.com/photo-1566073771259-6a8506099945";
-      
-      const hotelCard = document.createElement("div");
-      hotelCard.className = "hotel-card";
-      hotelCard.innerHTML = `
-        <img src="${image}">
-        <div class="hotel-info">
-          <h3>${room.hotelName || 'Premium Hotel'}</h3>
-          <p>${room.location || 'Location not set'} - ${room.type} Room</p>
-          <p class="price">₹${room.price} / night</p>
-          <p class="rating">⭐ 4.8</p>
-          <button onclick="openModal(this)">View Details</button>
-        </div>
-      `;
-      // Append to the end of the existing list
-      container.appendChild(hotelCard);
-    });
+  try {
+    const response = await fetch('/api/rooms');
+    const rooms = await response.json();
+
+    if (container && rooms.length > 0) {
+      rooms.forEach(room => {
+        const image = (room.images && room.images.length > 0) ? room.images[0] : "https://images.unsplash.com/photo-1566073771259-6a8506099945";
+        
+        const hotelCard = document.createElement("div");
+        hotelCard.className = "hotel-card";
+        hotelCard.innerHTML = `
+          <img src="${image}">
+          <div class="hotel-info">
+            <h3>${room.hotelName || 'Premium Hotel'}</h3>
+            <p>${room.location || 'Location not set'} - ${room.type} Room</p>
+            <p class="price">₹${room.price} / night</p>
+            <p class="rating">⭐ 4.8</p>
+            <button onclick="openModal(this)">View Details</button>
+          </div>
+        `;
+        container.appendChild(hotelCard);
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching rooms:", error);
   }
 });
 </script>

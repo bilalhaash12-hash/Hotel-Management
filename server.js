@@ -5,6 +5,14 @@ const path = require("path");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
+// Routes
+const hotelRoutes = require("./routes/hotelRoutes");
+const enquiryRoutes = require("./routes/enquiryRoutes");
+const bookingRoutes = require("./routes/bookingRoutes");
+const roomRoutes = require("./routes/roomRoutes");
+const reviewRoutes = require("./routes/reviewRoutes");
+const maintenanceRoutes = require("./routes/maintenanceRoutes");
+
 const app = express();
 const PORT = 5000;
 
@@ -18,46 +26,17 @@ mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log("MongoDB Connected"))
 .catch(err => console.log(err));
 
-// Booking Schema
-const bookingSchema = new mongoose.Schema({
-    name: String,
-    email: String,
-    phone: String,
-    room: String,
-    guests: String,
-    checkin: String,
-    checkout: String
-});
-
-// Booking Model
-const Booking = mongoose.model("Booking", bookingSchema);
+// API Routes
+app.use("/api/hotels", hotelRoutes);
+app.use("/api/enquiries", enquiryRoutes);
+app.use("/api/bookings", bookingRoutes);
+app.use("/api/rooms", roomRoutes);
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/maintenance", maintenanceRoutes);
 
 // Home Route
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
-});
-
-// Booking API
-app.post("/booking", async (req, res) => {
-
-    try {
-
-        const booking = new Booking(req.body);
-
-        await booking.save();
-
-        res.status(200).json({
-            message: "Booking Saved Successfully"
-        });
-
-    } catch (error) {
-
-        console.log(error);
-
-        res.status(500).json({
-            message: "Error Saving Booking"
-        });
-    }
 });
 
 // Start Server
