@@ -152,7 +152,7 @@ form.addEventListener("submit", async function(e) {
   const newHotel = { hotel, manager, email, phone, password };
 
   try {
-    const response = await fetch('/api/hotels/register', {
+    const response = await fetch('http://localhost:5000/api/hotels/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newHotel)

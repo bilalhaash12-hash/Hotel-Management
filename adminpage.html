@@ -527,7 +527,7 @@
     // FIX: Enquiry Variable Bug
     async function loadEnquiries() {
       try {
-        const response = await fetch('/api/enquiries');
+        const response = await fetch('http://localhost:5000/api/enquiries');
         const enquiries = await response.json();
         const table = document.getElementById("enquiryList");
         const recentTable = document.getElementById("recentEnquiryList");
@@ -578,7 +578,7 @@
     async function deleteEnquiry(id) {
       if (confirm("Delete this enquiry?")) {
         try {
-          await fetch(`/api/enquiries/${id}`, { method: 'DELETE' });
+          await fetch(`http://localhost:5000/api/enquiries/${id}`, { method: 'DELETE' });
           loadEnquiries();
         } catch (error) {
           console.error("Error deleting enquiry:", error);
@@ -589,7 +589,7 @@
     // BOOKINGS
     async function loadBookings() {
       try {
-        const response = await fetch('/api/bookings');
+        const response = await fetch('http://localhost:5000/api/bookings');
         let bookings = await response.json();
         
         let dashboardTable = document.getElementById("bookingListDashboard");
@@ -635,7 +635,7 @@
     async function deleteBooking(id) {
       if (confirm("Delete this booking?")) {
         try {
-          await fetch(`/api/bookings/${id}`, { method: 'DELETE' });
+          await fetch(`http://localhost:5000/api/bookings/${id}`, { method: 'DELETE' });
           loadBookings();
         } catch (error) {
           console.error("Error deleting booking:", error);
@@ -646,7 +646,7 @@
     // HOTELS
     async function loadHotels() {
       try {
-        const response = await fetch('/api/hotels');
+        const response = await fetch('http://localhost:5000/api/hotels');
         let data = await response.json();
         let table = document.getElementById("hotelList");
         table.innerHTML = "";
@@ -683,7 +683,7 @@
     async function updateHotelStatus(id, status) {
       if (status === 'Rejected' && !confirm("Are you sure you want to REJECT this hotel?")) return;
       try {
-        await fetch(`/api/hotels/${id}/status`, {
+        await fetch(`http://localhost:5000/api/hotels/${id}/status`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ status })
@@ -698,7 +698,7 @@
     async function deleteHotel(id) {
       if (confirm("Delete this hotel record?")) {
         try {
-          await fetch(`/api/hotels/${id}`, { method: 'DELETE' });
+          await fetch(`http://localhost:5000/api/hotels/${id}`, { method: 'DELETE' });
           loadHotels();
         } catch (error) {
           console.error("Error deleting hotel:", error);
@@ -709,7 +709,7 @@
     // REVIEWS
     async function loadReviews() {
       try {
-        const response = await fetch('/api/reviews');
+        const response = await fetch('http://localhost:5000/api/reviews');
         let data = await response.json();
         let table = document.getElementById("reviewList");
         table.innerHTML = "";
@@ -729,7 +729,7 @@
     // MAINTENANCE
     async function loadMaintenance() {
       try {
-        const response = await fetch('/api/maintenance');
+        const response = await fetch('http://localhost:5000/api/maintenance');
         let data = await response.json();
         let table = document.getElementById("maintenanceList");
         table.innerHTML = "";
@@ -749,7 +749,7 @@
 
     async function fix(id) {
       try {
-        await fetch(`/api/maintenance/${id}/status`, {
+        await fetch(`http://localhost:5000/api/maintenance/${id}/status`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ status: 'Fixed' })

@@ -5,6 +5,9 @@ const roomSchema = new mongoose.Schema({
   location: { type: String },
   type: { type: String, required: true },
   price: { type: Number, required: true },
+  checkin: { type: String },
+  checkout: { type: String },
+  features: { type: String },
   images: [{ type: String }],
   createdAt: { type: Date, default: Date.now }
 });

@@ -110,24 +110,34 @@
 
 <script src="admin-scripts.js"></script>
 <script>
-let rooms = JSON.parse(localStorage.getItem("rooms")) || [];
+let rooms = [];
 const container = document.getElementById("container");
+
+async function fetchRooms() {
+  try {
+    const response = await fetch('http://localhost:5000/api/rooms');
+    rooms = await response.json();
+    displayRooms();
+  } catch (error) {
+    console.error("Error fetching rooms:", error);
+  }
+}
 
 function displayRooms() {
   container.innerHTML = `<div class="add-card" onclick="addCard()">+</div>`;
   rooms.forEach((room, i) => {
-    let imagesHTML = room.images.map(img => `<img src="${img}">`).join("");
+    let imagesHTML = room.images && room.images.length > 0 ? room.images.map(img => `<img src="${img}">`).join("") : '';
     container.innerHTML += `
       <div class="card">
         <div class="images">${imagesHTML}</div>
         <div class="card-body">
-          <h3>${room.type}</h3>
+          <h3>${room.type || 'New Room'}</h3>
           <p style="color: #bbb; font-size: 14px;">📍 ${room.location || 'Location not set'}</p>
-          <p>₹${room.price}</p>
-          <p>${room.checkin} - ${room.checkout}</p>
-          <p>${room.features}</p>
+          <p>₹${room.price || '0'}</p>
+          <p>${room.checkin || ''} - ${room.checkout || ''}</p>
+          <p>${room.features || ''}</p>
           <button class="btn" onclick="toggleForm(${i})">Edit</button>
-          <button class="btn" onclick="deleteCard(${i})" style="background: red; color: white; margin-left: 5px;">Delete</button>
+          <button class="btn" onclick="deleteCard('${room._id}')" style="background: red; color: white; margin-left: 5px;">Delete</button>
         </div>
         <div class="form-box" id="form-${i}">
           <select id="type-${i}">
@@ -137,7 +147,7 @@ function displayRooms() {
             <option ${room.type==='Family'?'selected':''}>Family</option>
           </select>
           <input type="text" id="location-${i}" placeholder="Location/Place" value="${room.location || ''}">
-          <input type="number" id="price-${i}" placeholder="Price" value="${room.price}">
+          <input type="number" id="price-${i}" placeholder="Price" value="${room.price || ''}">
           <div style="display: flex; gap: 10px;">
             <input type="time" id="checkin-${i}" value="${room.checkin ? room.checkin.split(' ')[0] : ''}">
             <select id="checkinPeriod-${i}" style="width: 100px;">
@@ -152,26 +162,43 @@ function displayRooms() {
               <option ${room.checkout && room.checkout.includes('PM')?'selected':''}>PM</option>
             </select>
           </div>
-          <textarea id="features-${i}" placeholder="Features">${room.features}</textarea>
+          <textarea id="features-${i}" placeholder="Features">${room.features || ''}</textarea>
           <input type="file" id="images-${i}" multiple>
-          <button class="btn" onclick="updateCard(${i})">Update</button>
+          <button class="btn" onclick="updateCard(${i}, '${room._id}')">Update</button>
         </div>
       </div>
     `;
   });
 }
 
-function addCard() {
-  rooms.push({ type: "New Room", location: "", price: "", checkin: "", checkout: "", features: "", images: [] });
-  localStorage.setItem("rooms", JSON.stringify(rooms));
-  displayRooms();
+async function addCard() {
+  const userData = JSON.parse(localStorage.getItem("user")) || {};
+  const newRoom = {
+    type: "New Room",
+    hotelName: userData.hotel || "Premium Stay Hotel",
+    price: 0
+  };
+
+  try {
+    await fetch('http://localhost:5000/api/rooms', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newRoom)
+    });
+    fetchRooms();
+  } catch (error) {
+    console.error("Error creating room:", error);
+  }
 }
 
-function deleteCard(i) {
-  if(confirm("Delete this room?")) {
-    rooms.splice(i, 1);
-    localStorage.setItem("rooms", JSON.stringify(rooms));
-    displayRooms();
+async function deleteCard(id) {
+  if (confirm("Delete this room?")) {
+    try {
+      await fetch(`http://localhost:5000/api/rooms/${id}`, { method: 'DELETE' });
+      fetchRooms();
+    } catch (error) {
+      console.error("Error deleting room:", error);
+    }
   }
 }
 
@@ -180,7 +207,7 @@ function toggleForm(i) {
   form.style.display = (form.style.display === "block") ? "none" : "block";
 }
 
-function updateCard(i) {
+async function updateCard(i, id) {
   let files = document.getElementById("images-" + i).files;
   let checkin = document.getElementById("checkin-" + i).value;
   let checkinPeriod = document.getElementById("checkinPeriod-" + i).value;
@@ -196,24 +223,36 @@ function updateCard(i) {
     }));
   }
 
-  Promise.all(readers).then(images => {
+  Promise.all(readers).then(async (images) => {
     const userData = JSON.parse(localStorage.getItem("user")) || {};
     
-    rooms[i].type = document.getElementById("type-" + i).value;
-    rooms[i].location = document.getElementById("location-" + i).value;
-    rooms[i].price = document.getElementById("price-" + i).value;
-    rooms[i].checkin = checkin + " " + checkinPeriod;
-    rooms[i].checkout = checkout + " " + checkoutPeriod;
-    rooms[i].features = document.getElementById("features-" + i).value;
-    rooms[i].hotelName = userData.hotel || "Premium Stay Hotel";
+    const updatedData = {
+      type: document.getElementById("type-" + i).value,
+      location: document.getElementById("location-" + i).value,
+      price: document.getElementById("price-" + i).value,
+      checkin: checkin ? checkin + " " + checkinPeriod : "",
+      checkout: checkout ? checkout + " " + checkoutPeriod : "",
+      features: document.getElementById("features-" + i).value,
+      hotelName: userData.hotel || "Premium Stay Hotel"
+    };
     
-    if (images.length > 0) rooms[i].images = images;
-    localStorage.setItem("rooms", JSON.stringify(rooms));
-    displayRooms();
+    if (images.length > 0) updatedData.images = images;
+
+    try {
+      await fetch(`http://localhost:5000/api/rooms/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedData)
+      });
+      fetchRooms();
+    } catch (error) {
+      console.error("Error updating room:", error);
+    }
   });
 }
 
-displayRooms();
+// Initial fetch
+fetchRooms();
 </script>
 
 </body>

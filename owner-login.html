@@ -136,7 +136,7 @@ loginForm.addEventListener("submit", async function(e) {
   const password = document.getElementById("loginPassword").value.trim();
 
   try {
-    const response = await fetch('/api/hotels/login', {
+    const response = await fetch('http://localhost:5000/api/hotels/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })

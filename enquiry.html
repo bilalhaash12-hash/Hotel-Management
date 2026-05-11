@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function loadEnquiries() {
   try {
-    const response = await fetch('/api/enquiries');
+    const response = await fetch('http://localhost:5000/api/enquiries');
     const enquiries = await response.json();
     const list = document.getElementById("enquiryList");
     list.innerHTML = "";
@@ -168,7 +168,7 @@ async function loadEnquiries() {
 
 async function updateStatus(id, newStatus) {
   try {
-    await fetch(`/api/enquiries/${id}/status`, {
+    await fetch(`http://localhost:5000/api/enquiries/${id}/status`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: newStatus })
@@ -182,7 +182,7 @@ async function updateStatus(id, newStatus) {
 async function deleteEnquiry(id) {
   if (confirm("Are you sure you want to delete this enquiry?")) {
     try {
-      await fetch(`/api/enquiries/${id}`, { method: 'DELETE' });
+      await fetch(`http://localhost:5000/api/enquiries/${id}`, { method: 'DELETE' });
       loadEnquiries();
     } catch (error) {
       console.error("Error deleting enquiry:", error);

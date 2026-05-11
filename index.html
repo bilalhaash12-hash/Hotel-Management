@@ -447,7 +447,7 @@ async function bookNow() {
   };
 
   try {
-    const response = await fetch('/api/bookings', {
+    const response = await fetch('http://localhost:5000/api/bookings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newBooking)
@@ -488,7 +488,7 @@ document.getElementById("enquiryForm").addEventListener("submit", async function
   const newEnquiry = { name, email, phone, subject, message };
   
   try {
-    const response = await fetch('/api/enquiries', {
+    const response = await fetch('http://localhost:5000/api/enquiries', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newEnquiry)
@@ -511,7 +511,7 @@ document.addEventListener("DOMContentLoaded", async function() {
   const container = document.getElementById("featuredHotelContainer");
   
   try {
-    const response = await fetch('/api/rooms');
+    const response = await fetch('http://localhost:5000/api/rooms');
     const rooms = await response.json();
 
     if (container && rooms.length > 0) {

@@ -23,6 +23,17 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Update a room
+router.put('/:id', async (req, res) => {
+  try {
+    const updatedRoom = await Room.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updatedRoom) return res.status(404).json({ message: 'Room not found' });
+    res.status(200).json({ message: 'Room updated successfully', room: updatedRoom });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating room', error: error.message });
+  }
+});
+
 // Delete a room
 router.delete('/:id', async (req, res) => {
   try {
