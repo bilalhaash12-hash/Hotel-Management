@@ -1,46 +1,45 @@
-require("dotenv").config();
-
 const express = require("express");
-const path = require("path");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
-// Routes
-const hotelRoutes = require("./routes/hotelRoutes");
-const enquiryRoutes = require("./routes/enquiryRoutes");
-const bookingRoutes = require("./routes/bookingRoutes");
-const roomRoutes = require("./routes/roomRoutes");
-const reviewRoutes = require("./routes/reviewRoutes");
-const maintenanceRoutes = require("./routes/maintenanceRoutes");
-
 const app = express();
-const PORT = 5000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(__dirname));
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(
+  "mongodb+srv://bilalhash_db_user:9544905993@cluster0.xulyebe.mongodb.net/HotelDB?retryWrites=true&w=majority"
+)
 .then(() => console.log("MongoDB Connected"))
-.catch(err => console.log(err));
+.catch((err) => console.log(err));
 
-// API Routes
-app.use("/api/hotels", hotelRoutes);
-app.use("/api/enquiries", enquiryRoutes);
-app.use("/api/bookings", bookingRoutes);
-app.use("/api/rooms", roomRoutes);
-app.use("/api/reviews", reviewRoutes);
-app.use("/api/maintenance", maintenanceRoutes);
-
-// Home Route
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"));
+const enquirySchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  message: String
 });
 
-// Start Server
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT} 🚀`);
-    console.log(`Open http://localhost:${PORT}`);
+const Enquiry = mongoose.model("Enquiry", enquirySchema);
+
+app.post("/enquiry", async (req, res) => {
+  try {
+    const newEnquiry = new Enquiry(req.body);
+    await newEnquiry.save();
+    res.json({ message: "Enquiry Saved" });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+});
+
+app.get("/getenquiry", async (req, res) => {
+  try {
+    const data = await Enquiry.find();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching data" });
+  }
+});
+
+app.listen(5000, () => {
+  console.log("Server running on port 5000");
 });
