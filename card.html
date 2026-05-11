@@ -115,7 +115,7 @@ const container = document.getElementById("container");
 
 async function fetchRooms() {
   try {
-    const response = await fetch('http://localhost:5000/api/rooms');
+    const response = await fetch('http://https://hotel-management-xnc5.onrender.com/api/rooms');
     rooms = await response.json();
     displayRooms();
   } catch (error) {
@@ -180,7 +180,7 @@ async function addCard() {
   };
 
   try {
-    await fetch('http://localhost:5000/api/rooms', {
+    await fetch('http://https://hotel-management-xnc5.onrender.com/api/rooms', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newRoom)
@@ -194,7 +194,7 @@ async function addCard() {
 async function deleteCard(id) {
   if (confirm("Delete this room?")) {
     try {
-      await fetch(`http://localhost:5000/api/rooms/${id}`, { method: 'DELETE' });
+      await fetch(`http://https://hotel-management-xnc5.onrender.com/api/rooms/${id}`, { method: 'DELETE' });
       fetchRooms();
     } catch (error) {
       console.error("Error deleting room:", error);
@@ -239,7 +239,7 @@ async function updateCard(i, id) {
     if (images.length > 0) updatedData.images = images;
 
     try {
-      await fetch(`http://localhost:5000/api/rooms/${id}`, {
+      await fetch(`http://https://hotel-management-xnc5.onrender.com/api/rooms/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedData)
